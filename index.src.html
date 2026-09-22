@@ -494,8 +494,10 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <div class="sec">AI 智慧階層 <button class="help" id="lv-help-btn" type="button">階層說明</button></div>
     <div class="lv-table" id="lv-rows"></div>
     <div class="lv-legend" id="lv-legend" hidden></div>
-    <div class="sec">決策時限（逾時自動撤退）</div>
+    <div class="sec">決策時限</div>
     <div class="seg five" id="timer-seg"><button data-t="0">不限</button><button data-t="10">10 秒</button><button data-t="20">20 秒</button><button data-t="30">30 秒</button><button data-t="60">60 秒</button></div>
+    <div class="sec">時間到自動</div>
+    <div class="seg two" id="tact-seg"><button data-a="leave">撤退回營</button><button data-a="go">繼續前進</button></div>
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="seg two acts"><button class="primary" id="settings-ok">完成</button><button id="btn-reset-stats">清除紀錄</button></div>
@@ -665,7 +667,8 @@ function renderStats() {
 }
 
 /* ================= STATE ================= */
-const TL_KEY = 'incan-gold-timelimit';
+const TL_KEY = 'incan-gold-timelimit'; const TA_KEY = 'incan-gold-timeout-action';
+function loadTimeoutAction() { try { return localStorage.getItem(TA_KEY) === 'go' ? 'go' : 'leave'; } catch (e) { return 'leave'; } }
 let timerId = null;
 function loadTimeLimit() { try { return +localStorage.getItem(TL_KEY) || 0; } catch (e) { return 0; } }
 function stopTimer() { clearInterval(timerId); timerId = null; const t = $('#cmd-timer'); t.hidden = true; t.classList.remove('urgent'); }
@@ -673,12 +676,12 @@ function startTimer(p) {
   stopTimer(); const limit = G.timeLimit; if (!limit) return;
   const deadline = Date.now() + limit * 1000; const t = $('#cmd-timer'); t.hidden = false;
   const tick = () => {
-    const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000)); t.textContent = `⏱ 剩 ${left} 秒，逾時自動撤退`; t.classList.toggle('urgent', left <= 5);
-    if (left <= 0) { stopTimer(); if (G.phase === 'decide' && $('#decision').classList.contains('armed') && !p.choice) { log(`<s>時間到，${p.name} 自動撤退。</s>`); onChoice('leave'); } }
+    const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000)); t.textContent = `⏱ 剩 ${left} 秒，逾時自動${G.timeoutAction === 'go' ? '前進' : '撤退'}`; t.classList.toggle('urgent', left <= 5);
+    if (left <= 0) { stopTimer(); if (G.phase === 'decide' && $('#decision').classList.contains('armed') && !p.choice) { const a = G.timeoutAction; log(a === 'go' ? `<b>時間到，${p.name} 自動前進。</b>` : `<s>時間到，${p.name} 自動撤退。</s>`); onChoice(a); } }
   };
   tick(); timerId = setInterval(tick, 250);
 }
-const G = { running: false, timeLimit: loadTimeLimit(), mode: 'solo', levels: [3, 3, 3], players: [], round: 0, deck: [], pathCards: [], shown: {}, removed: {}, phase: 'lobby', humanQueue: [], qi: 0 };
+const G = { running: false, timeLimit: loadTimeLimit(), timeoutAction: loadTimeoutAction(), mode: 'solo', levels: [3, 3, 3], players: [], round: 0, deck: [], pathCards: [], shown: {}, removed: {}, phase: 'lobby', humanQueue: [], qi: 0 };
 let cardId = 0;
 function pathTotal() { return G.pathCards.reduce((s, c) => s + (c.left || 0), 0); }
 function inCave() { return G.players.filter(p => p.inCave); }
@@ -1140,6 +1143,7 @@ function aiDecide(p) {
 function renderLobby() {
   $$('#mode-seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === G.mode));
   $$('#timer-seg button').forEach(b => b.classList.toggle('on', +b.dataset.t === G.timeLimit));
+  $$('#tact-seg button').forEach(b => b.classList.toggle('on', b.dataset.a === G.timeoutAction)); $('#tact-seg').style.opacity = G.timeLimit ? 1 : .45;
   $('#lb-mode-t').textContent = G.mode === 'solo' ? '單人冒險' : '雙人冒險'; $('#lb-mode-s').textContent = G.mode === 'solo' ? '你 ＋ 3 名 AI 探險家' : 'P1 ＋ P2 ＋ 2 名 AI・同裝置輪流';
   const nAI = G.mode === 'duo' ? 2 : 3;
   $('#lv-rows').innerHTML = CLASSES.slice(4 - nAI).map((a, i) => `<span class="nm" style="color:${a.color}">${a.name}</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}</option>`).join('')}</select>`).join('');
@@ -1155,6 +1159,7 @@ $('#lv-help-btn').onclick = () => { const l = $('#lv-legend'); l.hidden = !l.hid
 $('#settings-ok').onclick = () => { $('#settings').hidden = true; AudioEngine.sfx('lock'); };
 $$('.lb-tabs button').forEach(b => b.onclick = () => { $$('.lb-tabs button').forEach(x => x.classList.toggle('on', x === b)); AudioEngine.sfx('cursor'); const t = b.dataset.tab; if (t === 'party') openSettings('隊伍：AI 智慧階層'); else if (t === 'stats') openSettings('冒險紀錄'); else if (t === 'settings') openSettings('設定'); });
 $('#timer-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.timeLimit = +b.dataset.t; try { localStorage.setItem(TL_KEY, G.timeLimit); } catch (err) { } AudioEngine.sfx('cursor'); renderLobby(); });
+$('#tact-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.timeoutAction = b.dataset.a; try { localStorage.setItem(TA_KEY, G.timeoutAction); } catch (err) { } AudioEngine.sfx('cursor'); renderLobby(); });
 $('#btn-start').onclick = () => { AudioEngine.sfx('lock'); startGame(); };
 $('#btn-reset-stats').onclick = () => { saveStats(defStats()); renderStats(); };
 $$('#cmd-menu button').forEach((b, i) => { b.onclick = () => { if (!cmdEnabled(i)) return; setCursor(i); runCmd(b.dataset.c); }; b.addEventListener('pointerenter', () => { if (cmdIndex !== i) { AudioEngine.sfx('cursor'); setCursor(i); } }); b.addEventListener('focus', () => setCursor(i)); });
