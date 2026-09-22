@@ -34,6 +34,8 @@
   animation:holo-idle 11s ease-in-out infinite}
 .holo.active{transition-duration:.06s;animation:none}
 .holo.releasing{transition-duration:.9s;animation:none}
+#app.motion .holo:not(.active){animation:none;transition:none}
+#motion-toggle.on{color:var(--green);border-color:var(--green);box-shadow:0 0 10px rgba(74,222,128,.5)}
 @keyframes holo-idle{0%,100%{--pointer-x:50%;--pointer-y:50%;--background-x:50%;--background-y:50%;--pointer-from-center:0;--pointer-from-top:.5;--pointer-from-left:.5;--card-opacity:0}
   30%{--pointer-x:26%;--pointer-y:28%;--background-x:44%;--background-y:42%;--pointer-from-center:.65;--pointer-from-top:.28;--pointer-from-left:.26;--card-opacity:.55}
   65%{--pointer-x:74%;--pointer-y:68%;--background-x:57%;--background-y:59%;--pointer-from-center:.6;--pointer-from-top:.68;--pointer-from-left:.74;--card-opacity:.55}}
@@ -332,6 +334,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       </select>
       <input type="range" id="bgm-vol" min="0" max="100" value="55" title="音量">
       <button class="ib" id="sfx-toggle" title="音效開關">🔔</button>
+      <button class="ib" id="motion-toggle" title="開啟手機動作感應（陀螺儀）" hidden>📱</button>
     </div>
   </header>
 
@@ -660,6 +663,40 @@ document.addEventListener('pointermove', e => {
   if (!el) return; if (activeHolo !== el) { activeHolo = el; holoGrab(el); } holoPoint(el, e.clientX, e.clientY);
 }, { passive: true });
 document.addEventListener('pointerout', e => { if (activeHolo && !e.relatedTarget?.closest?.('.holo')) { holoRelease(activeHolo); activeHolo = null; } });
+
+/* ===== 手機陀螺儀（pokemon-cards-css orientation 模式）：gamma/beta 相對基準 → 同一組變數設在 #app，所有卡一起動 ===== */
+(() => {
+  const app = $('#app'), btn = $('#motion-toggle');
+  if (!('DeviceOrientationEvent' in window) || !matchMedia('(hover:none)').matches) return;
+  const needsPermission = typeof DeviceOrientationEvent.requestPermission === 'function';
+  let on = false, base = null, target = null, cur = { x: 0, y: 0 }, raf = 0;
+  const LIM = { x: 16, y: 18 };
+  function handle(e) {
+    if (e.beta == null || e.gamma == null) return;
+    if (!base) base = { beta: e.beta, gamma: e.gamma };
+    target = { x: e.gamma - base.gamma, y: e.beta - base.beta };
+    if (!on) enable();
+  }
+  function apply() {
+    raf = requestAnimationFrame(apply); if (!target) return;
+    cur.x += (target.x - cur.x) * .18; cur.y += (target.y - cur.y) * .18;
+    const dx = clamp(cur.x, -LIM.x, LIM.x), dy = clamp(cur.y, -LIM.y, LIM.y);
+    const px = adjust(dx, -LIM.x, LIM.x, 0, 100), py = adjust(dy, -LIM.y, LIM.y, 0, 100), s = app.style;
+    s.setProperty('--pointer-x', px.toFixed(2) + '%'); s.setProperty('--pointer-y', py.toFixed(2) + '%');
+    s.setProperty('--background-x', adjust(dx, -LIM.x, LIM.x, 37, 63).toFixed(2) + '%'); s.setProperty('--background-y', adjust(dy, -LIM.y, LIM.y, 33, 67).toFixed(2) + '%');
+    s.setProperty('--rotate-x', (-dx).toFixed(2) + 'deg'); s.setProperty('--rotate-y', dy.toFixed(2) + 'deg');
+    s.setProperty('--pointer-from-center', clamp(Math.hypot(px - 50, py - 50) / 50, 0, 1).toFixed(3));
+    s.setProperty('--pointer-from-top', (py / 100).toFixed(3)); s.setProperty('--pointer-from-left', (px / 100).toFixed(3)); s.setProperty('--card-opacity', '1');
+  }
+  function enable() { on = true; app.classList.add('motion'); btn.hidden = false; btn.classList.add('on'); btn.title = '動作感應中，點一下重設水平'; cancelAnimationFrame(raf); apply(); }
+  async function request() {
+    try { const r = await DeviceOrientationEvent.requestPermission(); if (r !== 'granted') { btn.title = '未取得動作感應權限，請到設定允許'; return; } } catch (e) { btn.title = '此瀏覽器不支援動作感應'; return; }
+    base = null; window.addEventListener('deviceorientation', handle, true);
+  }
+  btn.onclick = () => { if (on) { base = null; cur = { x: 0, y: 0 }; } else if (needsPermission) request(); };
+  if (needsPermission) btn.hidden = false;
+  else window.addEventListener('deviceorientation', handle, true);
+})();
 
 /* ================= FX ================= */
 const center = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
