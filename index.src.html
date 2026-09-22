@@ -315,35 +315,32 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   .lobby{container-type:size;--s:max(calc(100cqw / 768),calc(100cqh / 1375));--ox:calc((100cqw - 768 * var(--s)) / 2);--oy:calc((100cqh - 1375 * var(--s)) / 2)}
   .lb-bg{background:url("__LOBBYBG__") center / cover no-repeat,#050403}
   .lb-shade{background:none}
-  .lb-title,.lb-gear,.lb-gems,#lb-prog{display:none}
+  .lb-title,.lb-gear,.lb-gems,#lb-prog,#btn-start2,#lb-gear2,#lb-compass{display:none}
   .lb-start{text-shadow:none}
   .lb-start .hex,.lb-start .ic,.lb-start .txt,.lb-start::before{display:none}
-  .lb-start:active,.lb-card:active,.lb-hit:active{transform:none;filter:brightness(1.3);background:rgba(255,255,255,.08)}
+  .lb-start:active,.lb-card:active{transform:none;filter:brightness(1.3);background:rgba(255,255,255,.07)}
   .lb-row3{display:contents}
   .lb-card{position:absolute;background:none;border:0;box-shadow:none;clip-path:none;padding:0}
   .lb-card *{display:none}
-  .lb-hit{display:block;position:absolute;background:none;border:0}
+  .lb-hit{position:absolute;background:none;border:0}
   .lb-ov{display:contents}
-  .ov{position:absolute;line-height:1;white-space:nowrap;pointer-events:none;font-family:"Noto Sans TC",sans-serif;color:#d2c6a4;font-weight:500;font-size:calc(15 * var(--s));letter-spacing:.02em}
+  .ov{position:absolute;line-height:1;white-space:nowrap;pointer-events:none;font-family:"Noto Sans TC",sans-serif;color:#cfc3a1;font-weight:500;font-size:calc(15 * var(--s));letter-spacing:.02em}
   .ov.num{font-size:calc(24 * var(--s));font-weight:700;color:#fff}
-  #ov-start-s{font-size:calc(19 * var(--s));color:#dbeeea;letter-spacing:.08em}
-  #ov-gem3{color:#e8dcc0}
-  #ov-log-t{font-size:calc(19 * var(--s));font-weight:700;color:#fff}
-  .lb-start{left:calc(var(--ox) + 218 * var(--s));top:calc(var(--oy) + 535 * var(--s));width:calc(342 * var(--s));height:calc(117 * var(--s))}
+  #ov-gem3{color:#e8dcc0;font-size:calc(17 * var(--s))}
+  #ov-log-t,#ov-mode-t{font-size:calc(20 * var(--s));font-weight:700;color:#f2e8cf}
+  .lb-start{left:calc(var(--ox) + 232 * var(--s));top:calc(var(--oy) + 498 * var(--s));width:calc(312 * var(--s));height:calc(196 * var(--s))}
   #lb-team{left:calc(var(--ox) + 62 * var(--s));top:calc(var(--oy) + 722 * var(--s));width:calc(236 * var(--s));height:calc(78 * var(--s))}
   #lb-modecard{left:calc(var(--ox) + 306 * var(--s));top:calc(var(--oy) + 722 * var(--s));width:calc(226 * var(--s));height:calc(78 * var(--s))}
   #lb-set{left:calc(var(--ox) + 540 * var(--s));top:calc(var(--oy) + 722 * var(--s));width:calc(168 * var(--s));height:calc(78 * var(--s))}
   #lb-log{left:calc(var(--ox) + 62 * var(--s));top:calc(var(--oy) + 926 * var(--s));width:calc(188 * var(--s));height:calc(74 * var(--s))}
   #lb-bag{left:calc(var(--ox) + 512 * var(--s));top:calc(var(--oy) + 926 * var(--s));width:calc(196 * var(--s));height:calc(74 * var(--s))}
-  #btn-start2{left:calc(var(--ox) + 236 * var(--s));top:calc(var(--oy) + 1156 * var(--s));width:calc(298 * var(--s));height:calc(62 * var(--s))}
-  #lb-gear2{left:calc(var(--ox) + 598 * var(--s));top:calc(var(--oy) + 1163 * var(--s));width:calc(68 * var(--s));height:calc(52 * var(--s))}
-  #lb-compass{left:calc(var(--ox) + 98 * var(--s));top:calc(var(--oy) + 1163 * var(--s));width:calc(68 * var(--s));height:calc(52 * var(--s))}
-  #ov-start-s{left:calc(var(--ox) + 346 * var(--s));top:calc(var(--oy) + 610 * var(--s))}
   #ov-team-s{left:calc(var(--ox) + 151 * var(--s));top:calc(var(--oy) + 772 * var(--s))}
   #ov-mode-s{left:calc(var(--ox) + 382 * var(--s));top:calc(var(--oy) + 772 * var(--s))}
-  #ov-set-s{left:calc(var(--ox) + 611 * var(--s));top:calc(var(--oy) + 772 * var(--s))}
-  #ov-gem3{left:calc(var(--ox) + 458 * var(--s));top:calc(var(--oy) + 842 * var(--s))}
-  #ov-log-t{left:calc(var(--ox) + 127 * var(--s));top:calc(var(--oy) + 943 * var(--s))}
+  #ov-set-s{left:calc(var(--ox) + 608 * var(--s));top:calc(var(--oy) + 772 * var(--s))}
+  #ov-gem3{left:calc(var(--ox) + 458 * var(--s));top:calc(var(--oy) + 840 * var(--s))}
+  #ov-mode-t{left:calc(var(--ox) + 333 * var(--s));top:calc(var(--oy) + 737 * var(--s))}
+  #ov-log-t{left:calc(var(--ox) + 122 * var(--s));top:calc(var(--oy) + 940 * var(--s))}
+  #ov-log-s{left:calc(var(--ox) + 122 * var(--s));top:calc(var(--oy) + 972 * var(--s))}
   #ov-n1{left:calc(var(--ox) + 152 * var(--s));top:calc(var(--oy) + 864 * var(--s))}
   #ov-n2{left:calc(var(--ox) + 308 * var(--s));top:calc(var(--oy) + 864 * var(--s))}
   #ov-n3{left:calc(var(--ox) + 458 * var(--s));top:calc(var(--oy) + 864 * var(--s))}
@@ -523,11 +520,13 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   </div>
   <div class="lb-gems" id="lb-stats"></div>
   <div class="lb-ov" id="lb-ov">
-    <span class="ov" id="ov-start-s">進入神廟・尋找寶藏</span>
+    
     <span class="ov" id="ov-team-s">你＋3 名 AI 探險家</span>
     <span class="ov" id="ov-mode-s">單人冒險・點擊切換</span>
     <span class="ov" id="ov-set-s">規則・AI・時限</span>
     <span class="ov" id="ov-gem3">鑽石</span>
+    <span class="ov" id="ov-mode-t">冒險模式</span>
+    <span class="ov" id="ov-log-s">查看歷史與成就</span>
     <span class="ov" id="ov-log-t">探險紀錄</span>
     <span class="ov num" id="ov-n1">0</span><span class="ov num" id="ov-n2">0</span><span class="ov num" id="ov-n3">0</span><span class="ov num" id="ov-n4">0</span>
   </div>
