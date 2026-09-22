@@ -10,7 +10,8 @@ def uri(name, mime='image/png'):
 
 out = (src.replace('__GLITTER__', uri('glitter.png'))
           .replace('__ILLUSION__', uri('illusion.png'))
-          .replace('__ILLUSION_MASK__', uri('illusion-mask.png')))
+          .replace('__ILLUSION_MASK__', uri('illusion-mask.png'))
+          .replace('__LOBBYBG__', uri('lobby.jpg', 'image/jpeg')))
 assert '__' + 'GLITTER__' not in out
 (root / 'index.html').write_text(out, encoding='utf-8')
 

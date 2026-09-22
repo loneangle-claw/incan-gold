@@ -269,8 +269,60 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 [data-foil="reverse"] .glare{background-image:radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y),hsla(0,0%,100%,.8) 10%,hsla(0,0%,100%,.5) 20%,hsla(0,0%,0%,.75) 90%);filter:brightness(.7) contrast(1.5)}
 [data-foil="reverse"] .glare::after{display:block;opacity:var(--card-opacity);background-image:radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y),hsl(0,0%,100%) 10%,hsla(0,0%,100%,.5) 20%,hsla(0,0%,0%,.5) 120%);filter:brightness(1) contrast(1.5)}
 
+/* ===== 首頁（全幅插畫） ===== */
+.lobby{position:fixed;inset:0;z-index:50;background:#050914;overflow:hidden;font-weight:700;color:#f3e7c3}
+.lobby[hidden]{display:none!important}
+.lb-bg{position:absolute;inset:0;background:url("__LOBBYBG__") center top / cover no-repeat}
+.lb-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,transparent 12%,transparent 78%,rgba(0,0,0,.75) 92%,#000 100%)}
+.lobby>*{position:absolute}
+.lb-brand{left:0;top:0;width:48%;height:calc(11.5% + env(safe-area-inset-top,0px));padding:calc(1% + env(safe-area-inset-top,0px)) 6% 0 4%;background:linear-gradient(90deg,rgba(5,9,20,.97) 78%,transparent);display:flex;align-items:center;gap:6px;font-size:clamp(12px,3.4vw,18px);letter-spacing:.08em;color:#e8c76a;text-shadow:0 1px 0 #000,0 0 10px rgba(0,0,0,.8);line-height:1.05}
+.lb-brand small{display:block;font-size:.6em;letter-spacing:.3em;color:#f3e7c3}
+.lb-gem{color:#7fe3ff;font-size:1.4em;text-shadow:0 0 8px #3fd0ff}
+.lb-gear{right:4%;top:calc(2.5% + env(safe-area-inset-top,0px));width:clamp(34px,9vw,48px);aspect-ratio:1;border:2px solid #e8c76a;border-radius:8px;background:rgba(8,12,24,.75);color:#e8c76a;font-size:clamp(18px,5vw,26px);display:grid;place-items:center;box-shadow:0 0 12px rgba(232,199,106,.35)}
+.lb-title{left:0;right:0;top:25%;text-align:center;pointer-events:none;display:none}
+.lb-title .zh{font-size:clamp(40px,11vw,84px);font-weight:900;letter-spacing:.08em;color:#f5d67a;background:linear-gradient(180deg,#fff2b0,#e8b23a 55%,#9a6a10);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 0 #3a2508) drop-shadow(0 0 18px rgba(255,200,80,.45))}
+.lb-title .en{font-size:clamp(11px,2.8vw,18px);letter-spacing:.35em;color:#f3e7c3;margin-top:2px;text-shadow:0 1px 2px #000}
+.lb-card{left:22%;width:56%;display:flex;align-items:center;gap:10px;padding:2% 4%;border:2px solid #e8c76a;border-radius:6px;background:linear-gradient(90deg,rgba(6,10,22,.95),rgba(14,20,40,.92));box-shadow:0 0 0 1px #6b4d12,0 0 16px rgba(232,199,106,.3),inset 0 0 20px rgba(0,0,0,.6);clip-path:polygon(3% 0,97% 0,100% 50%,97% 100%,3% 100%,0 50%);text-align:left;color:#f3e7c3}
+.lb-card .ic{width:2em;height:2em;display:grid;place-items:center;border:1px solid #e8c76a;border-radius:4px;background:#1a1408;color:#e8c76a;font-size:.95em;flex:none}
+.lb-card b{display:block;font-size:clamp(14px,4.2vw,22px);letter-spacing:.06em;color:#fff}
+.lb-card small{display:block;font-size:clamp(10px,2.8vw,13px);color:#cdbf98;font-weight:500}
+.lb-card .arrow{margin-left:auto;color:#e8c76a;font-size:1.3em}
+.lb-cave{top:38.3%;height:8.4%;left:16%;width:68%;pointer-events:none}
+.lb-mode{top:63.5%;height:9%}
+.lb-mode:active{transform:scale(.98)}
+.lb-start{left:22%;width:56%;top:73.5%;height:9.5%;display:grid;place-items:center;color:#fff;font-size:clamp(20px,6vw,34px);font-weight:900;letter-spacing:.2em;text-shadow:0 0 12px #3fd0ff,0 2px 0 #0a3a50}
+.lb-start .hex{position:absolute;inset:0;background:linear-gradient(180deg,#2bd4ff,#0a86c8 55%,#083f70);clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);box-shadow:inset 0 0 30px rgba(255,255,255,.25)}
+.lb-start::before{content:"";position:absolute;inset:-4px;background:#e8c76a;clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);z-index:-1;filter:drop-shadow(0 0 12px rgba(63,208,255,.6))}
+.lb-start .txt{position:relative}
+.lb-start:active{transform:scale(.97)}
+.lb-stats{left:2%;width:96%;top:83.5%;height:7%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;border:2px solid #e8c76a;border-radius:6px;background:rgba(6,10,22,.92);box-shadow:0 0 0 1px #6b4d12;padding:0 2%}
+.lb-stats .s{display:flex;align-items:center;gap:8px;justify-content:center;border-right:1px solid #6b4d12;height:70%}
+.lb-stats .s:last-child{border-right:0}
+.lb-stats .s i{font-style:normal;font-size:clamp(14px,4.5vw,24px);color:#e8c76a}
+.lb-stats .s small{display:block;font-size:clamp(9px,2.4vw,12px);color:#cdbf98;font-weight:500}
+.lb-stats .s b{font-size:clamp(13px,4vw,20px);color:#fff}
+.lb-tabs{left:0;right:0;bottom:0;height:calc(9.5% + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,#0b1220,#050914);border-top:2px solid #6b4d12}
+.lb-tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#9a8f72;font-size:clamp(10px,2.8vw,14px);font-weight:700;border-right:1px solid #1e2740}
+.lb-tabs button:last-child{border-right:0}
+.lb-tabs button i{font-style:normal;font-size:1.6em;line-height:1}
+.lb-tabs button.on{color:#7fe3ff;text-shadow:0 0 10px #3fd0ff}
+/* 寬螢幕／橫式：圖片會被裁，改成置中面板排版 */
+@media (min-aspect-ratio:7/10){
+  .lb-bg{background-position:center 30%}
+  .lb-shade{background:rgba(0,0,0,.55)}
+  .lb-title{display:block;top:9%}
+  .lb-cave{display:none}
+  .lb-mode{top:46%;height:12%;left:30%;width:40%}
+  .lb-start{top:61%;height:12%;left:30%;width:40%}
+  .lb-stats{top:77%;height:9%;left:20%;width:60%}
+}
+@media (min-aspect-ratio:7/10) and (max-height:560px){
+  .lb-title{top:4%}.lb-title .zh{font-size:clamp(28px,8vh,48px)}
+  .lb-mode{top:40%;height:16%}.lb-start{top:59%;height:16%}.lb-stats{top:78%;height:11%}
+}
+
 /* ===== 覆蓋層 ===== */
-.overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:#000;overflow:auto}
+.overlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.88);overflow:auto}
 .overlay[hidden]{display:none!important}
 .dlg{width:min(640px,100%);padding:14px 18px 16px}
 .dlg h2{margin:0 0 6px;font-size:22px;color:var(--yellow);font-weight:700;letter-spacing:.2em}
@@ -395,10 +447,29 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   <div class="lockmsg" id="lockmsg" hidden></div>
 </div>
 
-<!-- lobby / title -->
-<div class="overlay" id="lobby">
+<!-- lobby / title：全幅插畫，金框面板蓋在圖內烤死的按鈕位置 -->
+<div class="lobby" id="lobby">
+  <div class="lb-bg"></div>
+  <div class="lb-shade"></div>
+  <div class="lb-brand"><span class="lb-gem">◆</span><span>INCAN GOLD<small>DIAMANT ·</small></span></div>
+  <button class="lb-gear" id="lb-gear" title="設定">⚙</button>
+  <div class="lb-title"><div class="zh">印加寶藏</div><div class="en">INCAN GOLD · DIAMANT</div></div>
+  <div class="lb-card lb-cave"><span class="ic">▲</span><div><b>神秘洞窟</b><small>五座洞穴・等你探索</small></div><span class="arrow">›</span></div>
+  <button class="lb-card lb-mode" id="lb-mode"><span class="ic">👥</span><div><b id="lb-mode-t">單人冒險</b><small id="lb-mode-s">你 ＋ 3 名 AI 探險家</small></div><span class="arrow">⇄</span></button>
+  <button class="lb-start" id="btn-start"><span class="hex"></span><span class="txt">◆ 開始探險</span></button>
+  <div class="lb-stats" id="lb-stats"></div>
+  <nav class="lb-tabs">
+    <button class="on" data-tab="home"><i>⌂</i>首頁</button>
+    <button data-tab="party"><i>👥</i>隊伍</button>
+    <button data-tab="stats"><i>▤</i>紀錄</button>
+    <button data-tab="settings"><i>⚙</i>設定</button>
+  </nav>
+</div>
+
+<!-- 隊伍／設定／紀錄 視窗 -->
+<div class="overlay" id="settings" hidden>
   <div class="win dlg">
-    <div class="title-art"><svg class="gem" viewBox="0 0 100 100"><polygon points="50,4 92,34 50,96 8,34" fill="#7ef9d2" stroke="#fff" stroke-width="3"/><polyline points="8,34 92,34" stroke="#fff" stroke-width="3" fill="none"/><polyline points="30,4 22,34 50,96 78,34 70,4" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/></svg><div class="big">印加寶藏</div><div class="en">INCAN GOLD ・ DIAMANT</div></div>
+    <h2 id="settings-h">隊伍與設定</h2>
     <div class="sec">冒險模式</div>
     <div class="menu" id="mode-seg">
       <button data-mode="solo" class="on">單人冒險　你 ＋ 3 名 AI 探險家</button>
@@ -413,7 +484,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="flex flex-wrap items-center gap-3 mt-4">
-      <button class="btn primary" id="btn-start">出發</button>
+      <button class="btn primary" id="settings-ok">完成</button>
       <button class="btn" id="btn-reset-stats">清除紀錄</button>
     </div>
     <div class="credit">五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。<br>寶石卡 1·2·3·4·5·5·7·7·9·11·11·13·14·15·17　陷阱五種各三張，爆掉後該張從牌庫移除。</div>
@@ -577,6 +648,7 @@ function loadStats() { try { return Object.assign(defStats(), JSON.parse(localSt
 function saveStats(s) { try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch (e) { } }
 function renderStats() {
   const s = loadStats();
+  $('#lb-stats').innerHTML = `<div class="s"><i>🏆</i><div><small>探險紀錄</small><b>${s.games} 次</b></div></div><div class="s"><i>💎</i><div><small>單場最高</small><b>${s.best} 顆</b></div></div><div class="s"><i>🔥</i><div><small>勝場 P1／AI</small><b>${s.p1}／${s.ai}</b></div></div>`;
   $('#stats').innerHTML = [['探險場數', s.games], ['P1 勝場', s.p1], ['P2 勝場', s.p2], ['AI 勝場', s.ai], ['單場最高', s.best], ['爆掉次數', s.busts]].map(([l, v]) => `<div class="stat"><span>${l}</span><b>${v}</b></div>`).join('');
 }
 
@@ -1056,12 +1128,18 @@ function aiDecide(p) {
 function renderLobby() {
   $$('#mode-seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === G.mode));
   $$('#timer-seg button').forEach(b => b.classList.toggle('on', +b.dataset.t === G.timeLimit));
+  $('#lb-mode-t').textContent = G.mode === 'solo' ? '單人冒險' : '雙人冒險'; $('#lb-mode-s').textContent = G.mode === 'solo' ? '你 ＋ 3 名 AI 探險家' : 'P1 ＋ P2 ＋ 2 名 AI・同裝置輪流';
   const nAI = G.mode === 'duo' ? 2 : 3;
   $('#lv-rows').innerHTML = CLASSES.slice(4 - nAI).map((a, i) => `<div class="lv-row" style="--pc:${a.color}"><span class="nm">${a.name}（AI）</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}・${LEVELS[l].en}</option>`).join('')}</select><div class="lv-desc" id="lvd-${i}">${LEVELS[G.levels[i]].d}</div></div>`).join('');
   $$('#lv-rows select').forEach(s => s.onchange = () => { G.levels[+s.dataset.i] = +s.value; $('#lvd-' + s.dataset.i).textContent = LEVELS[+s.value].d; });
   renderStats();
 }
 $('#mode-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.mode = b.dataset.mode; AudioEngine.sfx('cursor'); renderLobby(); });
+$('#lb-mode').onclick = () => { G.mode = G.mode === 'solo' ? 'duo' : 'solo'; AudioEngine.sfx('cursor'); renderLobby(); };
+function openSettings(title) { $('#settings-h').textContent = title || '隊伍與設定'; $('#settings').hidden = false; renderLobby(); }
+$('#lb-gear').onclick = () => openSettings('設定');
+$('#settings-ok').onclick = () => { $('#settings').hidden = true; AudioEngine.sfx('lock'); };
+$$('.lb-tabs button').forEach(b => b.onclick = () => { $$('.lb-tabs button').forEach(x => x.classList.toggle('on', x === b)); AudioEngine.sfx('cursor'); const t = b.dataset.tab; if (t === 'party') openSettings('隊伍：AI 智慧階層'); else if (t === 'stats') openSettings('冒險紀錄'); else if (t === 'settings') openSettings('設定'); });
 $('#timer-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.timeLimit = +b.dataset.t; try { localStorage.setItem(TL_KEY, G.timeLimit); } catch (err) { } AudioEngine.sfx('cursor'); renderLobby(); });
 $('#btn-start').onclick = () => { AudioEngine.sfx('lock'); startGame(); };
 $('#btn-reset-stats').onclick = () => { saveStats(defStats()); renderStats(); };
@@ -1069,7 +1147,7 @@ $$('#cmd-menu button').forEach((b, i) => { b.onclick = () => { if (!cmdEnabled(i
 $('#btn-quit').onclick = quitGame;
 $('#handoff-ok').onclick = () => { $('#handoff').hidden = true; showDecision(G.humanQueue[G.qi]); };
 document.addEventListener('keydown', e => {
-  if (!$('#lobby').hidden || !$('#modal').hidden || !$('#handoff').hidden) return;
+  if (!$('#lobby').hidden || !$('#modal').hidden || !$('#handoff').hidden || !$('#settings').hidden) return;
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); AudioEngine.sfx('cursor'); let i = cmdIndex; for (let k = 0; k < 4; k++) { i = (i + (e.key === 'ArrowDown' ? 1 : 3)) % 4; if (cmdEnabled(i)) break; } setCursor(i); }
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (cmdEnabled(cmdIndex)) runCmd(CMDS[cmdIndex]); }
 });
