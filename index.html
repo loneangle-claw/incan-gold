@@ -388,6 +388,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .help{font-size:11px;padding:1px 8px;border:1px solid var(--dim);border-radius:4px;color:var(--dim);letter-spacing:0}
 .lv-table{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center}
 .lv-table .nm{white-space:nowrap;font-size:14px}
+.lv-table .lv-desc{grid-column:1/3;font-size:12px;color:var(--dim);line-height:1.35;margin:-2px 0 4px;padding-left:2px}
 .lv-table select{width:100%;padding:6px 8px;font-size:14px;border:2px solid #fff;border-radius:6px;background:#000}
 .lv-legend{margin-top:6px;font-size:12px;color:var(--dim);line-height:1.45;border:1px dotted #555;border-radius:6px;padding:6px 8px}
 .lv-legend b{color:var(--yellow);font-weight:700}
@@ -571,7 +572,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="seg two acts"><button class="primary" id="settings-ok">完成</button><button id="btn-reset-stats">清除紀錄</button></div>
-    <details class="rules"><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。</details>
+    <details class="rules" open><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。<div style="margin-top:6px;color:#666">版本 2026-09-22 · build 19（若手機顯示的版本較舊，請重新整理一次）</div></details>
   </div>
 </div>
 
@@ -1227,8 +1228,8 @@ function renderLobby() {
   $('#lb-mode-s').textContent = G.mode === 'solo' ? '單人冒險・點擊切換' : '雙人冒險・點擊切換'; $('#lb-team-s').textContent = G.mode === 'solo' ? '你＋3 名 AI 探險家' : 'P1＋P2＋2 名 AI';
   $('#ov-mode-s').textContent = $('#lb-mode-s').textContent; $('#ov-team-s').textContent = $('#lb-team-s').textContent;
   const nAI = G.mode === 'duo' ? 2 : 3;
-  $('#lv-rows').innerHTML = CLASSES.slice(4 - nAI).map((a, i) => `<span class="nm" style="color:${a.color}">${a.name}</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}</option>`).join('')}</select>`).join('');
-  $$('#lv-rows select').forEach(s => s.onchange = () => { G.levels[+s.dataset.i] = +s.value; AudioEngine.sfx('cursor'); });
+  $('#lv-rows').innerHTML = CLASSES.slice(4 - nAI).map((a, i) => `<span class="nm" style="color:${a.color}">${a.name}</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}・${LEVELS[l].en}</option>`).join('')}</select><div class="lv-desc" id="lvd-${i}">${LEVELS[G.levels[i]].d}</div>`).join('');
+  $$('#lv-rows select').forEach(s => s.onchange = () => { G.levels[+s.dataset.i] = +s.value; $('#lvd-' + s.dataset.i).textContent = LEVELS[+s.value].d; AudioEngine.sfx('cursor'); });
   $('#lv-legend').innerHTML = [1, 2, 3, 4, 5].map(l => `<div><b>Lv${l} ${LEVELS[l].n}</b>　${LEVELS[l].d}</div>`).join('');
   renderStats();
 }
