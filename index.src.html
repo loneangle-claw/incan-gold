@@ -642,7 +642,7 @@ const T = REDUCED ? { flip: 200, afterFlip: 300, aiReveal: 500, chip: 500, gap: 
 const AudioEngine = (() => {
   let ctx, master, musicGain, sfxGain, noiseBuf;
   let style = 'track1', playing = false, timer = null, step = 0, live = [], sfxOn = true;
-  const TRACKS = { track1: 'music/track1.m4a', track2: 'music/track2.m4a' };
+  const TRACKS = { track1: 'music/track1.mp4', track2: 'music/track2.mp4' };
   let music = null, musicNode = null, musicKey = null;
   const FILE = location.protocol === 'file:';
   function ensureMusic() {

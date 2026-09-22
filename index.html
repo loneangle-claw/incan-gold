@@ -571,7 +571,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="seg two acts"><button class="primary" id="settings-ok">完成</button><button id="btn-reset-stats">清除紀錄</button></div>
-    <details class="rules" open><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。<div style="margin-top:6px;color:#666">版本 2026-09-23 · build 20（若手機顯示的版本較舊，請重新整理一次）</div></details>
+    <details class="rules" open><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。<div style="margin-top:6px;color:#666">版本 2026-09-23 · build 21（若手機顯示的版本較舊，請重新整理一次）</div></details>
   </div>
 </div>
 
@@ -642,7 +642,7 @@ const T = REDUCED ? { flip: 200, afterFlip: 300, aiReveal: 500, chip: 500, gap: 
 const AudioEngine = (() => {
   let ctx, master, musicGain, sfxGain, noiseBuf;
   let style = 'track1', playing = false, timer = null, step = 0, live = [], sfxOn = true;
-  const TRACKS = { track1: 'music/track1.m4a', track2: 'music/track2.m4a' };
+  const TRACKS = { track1: 'music/track1.mp4', track2: 'music/track2.mp4' };
   let music = null, musicNode = null, musicKey = null;
   const FILE = location.protocol === 'file:';
   function ensureMusic() {
