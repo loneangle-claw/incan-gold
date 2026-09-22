@@ -269,56 +269,94 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 [data-foil="reverse"] .glare{background-image:radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y),hsla(0,0%,100%,.8) 10%,hsla(0,0%,100%,.5) 20%,hsla(0,0%,0%,.75) 90%);filter:brightness(.7) contrast(1.5)}
 [data-foil="reverse"] .glare::after{display:block;opacity:var(--card-opacity);background-image:radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y),hsl(0,0%,100%) 10%,hsla(0,0%,100%,.5) 20%,hsla(0,0%,0%,.5) 120%);filter:brightness(1) contrast(1.5)}
 
-/* ===== 首頁（全幅插畫） ===== */
-.lobby{position:fixed;inset:0;z-index:50;background:#050914;overflow:hidden;font-weight:700;color:#f3e7c3}
+/* ===== 首頁（全幅插畫，馬丘比丘版） ===== */
+.lobby{position:fixed;inset:0;z-index:50;background:#0a0704;overflow:hidden;font-weight:700;color:#f3e7c3}
 .lobby[hidden]{display:none!important}
-.lb-bg{position:absolute;inset:0;background:url("__LOBBYBG__") center top / cover no-repeat}
-.lb-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,transparent 12%,transparent 78%,rgba(0,0,0,.75) 92%,#000 100%)}
+.lb-bg{position:absolute;inset:0;background:url("__LOBBYBG__") center 25% / cover no-repeat,#0a0704}
+.lb-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.35) 100%)}
 .lobby>*{position:absolute}
-.lb-brand{left:0;top:0;width:48%;height:calc(9% + env(safe-area-inset-top,0px));padding:calc(1% + env(safe-area-inset-top,0px)) 6% 0 4%;background:linear-gradient(90deg,rgba(5,9,20,.97) 78%,transparent);display:flex;align-items:center;gap:6px;font-size:clamp(12px,3.4vw,18px);letter-spacing:.08em;color:#e8c76a;text-shadow:0 1px 0 #000,0 0 10px rgba(0,0,0,.8);line-height:1.05}
-.lb-brand small{display:block;font-size:.6em;letter-spacing:.3em;color:#f3e7c3}
-.lb-gem{color:#7fe3ff;font-size:1.4em;text-shadow:0 0 8px #3fd0ff}
-.lb-gear{right:4%;top:calc(2.5% + env(safe-area-inset-top,0px));width:clamp(34px,9vw,48px);aspect-ratio:1;border:2px solid #e8c76a;border-radius:8px;background:rgba(8,12,24,.75);color:#e8c76a;font-size:clamp(18px,5vw,26px);display:grid;place-items:center;box-shadow:0 0 12px rgba(232,199,106,.35)}
-.lb-title{left:0;right:0;top:25%;text-align:center;pointer-events:none;display:none}
-.lb-title .zh{font-size:clamp(40px,11vw,84px);font-weight:900;letter-spacing:.08em;color:#f5d67a;background:linear-gradient(180deg,#fff2b0,#e8b23a 55%,#9a6a10);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 0 #3a2508) drop-shadow(0 0 18px rgba(255,200,80,.45))}
+.lb-gear{right:3.5%;top:calc(0.5% + env(safe-area-inset-top,0px));width:clamp(38px,8.5vw,56px);aspect-ratio:1;border:2px solid #e8c76a;border-radius:8px;background:#0b0906;color:#e8c76a;font-size:clamp(20px,5vw,30px);display:grid;place-items:center;box-shadow:0 0 0 1px #6b4d12,0 0 12px rgba(232,199,106,.35);clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+.lb-title{left:0;right:0;top:9%;text-align:center;pointer-events:none;display:none}
+.lb-title .zh{font-size:clamp(40px,11vw,84px);font-weight:900;letter-spacing:.08em;background:linear-gradient(180deg,#fff2b0,#e8b23a 55%,#9a6a10);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 0 #3a2508) drop-shadow(0 0 18px rgba(255,200,80,.45))}
 .lb-title .en{font-size:clamp(11px,2.8vw,18px);letter-spacing:.35em;color:#f3e7c3;margin-top:2px;text-shadow:0 1px 2px #000}
-.lb-card{left:22%;width:56%;display:flex;align-items:center;gap:10px;padding:2% 4%;border:2px solid #e8c76a;border-radius:6px;background:linear-gradient(90deg,#070b16,#0e1428);box-shadow:0 0 0 1px #6b4d12,0 0 16px rgba(232,199,106,.3),inset 0 0 20px rgba(0,0,0,.6);clip-path:polygon(3% 0,97% 0,100% 50%,97% 100%,3% 100%,0 50%);text-align:left;color:#f3e7c3}
-.lb-card .ic{width:2em;height:2em;display:grid;place-items:center;border:1px solid #e8c76a;border-radius:4px;background:#1a1408;color:#e8c76a;font-size:.95em;flex:none}
-.lb-card b{display:block;font-size:clamp(14px,4.2vw,22px);letter-spacing:.06em;color:#fff}
-.lb-card small{display:block;font-size:clamp(10px,2.8vw,13px);color:#cdbf98;font-weight:500}
-.lb-card .arrow{margin-left:auto;color:#e8c76a;font-size:1.3em}
-.lb-cave{top:32.4%;height:9.4%;left:6%;width:88%;pointer-events:none}
-.lb-mode{top:60%;height:9.9%;left:13%;width:74%}
-.lb-mode:active{transform:scale(.98)}
-.lb-start{left:13%;width:74%;top:70.9%;height:10.5%;display:grid;place-items:center;color:#fff;font-size:clamp(20px,6vw,34px);font-weight:900;letter-spacing:.2em;text-shadow:0 0 12px #3fd0ff,0 2px 0 #0a3a50}
-.lb-start .hex{position:absolute;inset:0;background:linear-gradient(180deg,#2bd4ff,#0a86c8 55%,#083f70);clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);box-shadow:inset 0 0 30px rgba(255,255,255,.25)}
-.lb-start::before{content:"";position:absolute;inset:-4px;background:#e8c76a;clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);z-index:-1;filter:drop-shadow(0 0 12px rgba(63,208,255,.6))}
-.lb-start .txt{position:relative}
+.lb-start{left:23%;width:54%;top:47.0%;height:12.7%;display:flex;align-items:center;justify-content:center;gap:4%;color:#fff;text-shadow:0 0 12px rgba(0,0,0,.8),0 2px 0 #043a36}
+.lb-start .hex{position:absolute;inset:0;background:linear-gradient(180deg,#1f8f86,#0d5a55 55%,#083b38);clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);box-shadow:inset 0 0 30px rgba(255,255,255,.15)}
+.lb-start::before{content:"";position:absolute;inset:-4px;background:#e8c76a;clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%);z-index:-1;filter:drop-shadow(0 0 12px rgba(232,199,106,.5))}
+.lb-start .ic{position:relative;color:#e8c76a;font-size:clamp(22px,6vw,36px);filter:drop-shadow(0 0 6px rgba(232,199,106,.7))}
+.lb-start .txt{position:relative;text-align:left;line-height:1.1}
+.lb-start .txt b{display:block;font-size:clamp(22px,6.4vw,38px);font-weight:900;letter-spacing:.14em}
+.lb-start .txt small{display:block;font-size:clamp(10px,2.8vw,14px);color:#dff3ef;font-weight:500;letter-spacing:.05em;margin-top:2px}
 .lb-start:active{transform:scale(.97)}
-.lb-stats{left:0;width:100%;top:81.9%;height:7.8%;border-radius:0;border-left:0;border-right:0;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;border:2px solid #e8c76a;border-radius:6px;background:#070b16;box-shadow:0 0 0 1px #6b4d12;padding:0 2%}
-.lb-stats .s{display:flex;align-items:center;gap:8px;justify-content:center;border-right:1px solid #6b4d12;height:70%}
-.lb-stats .s:last-child{border-right:0}
-.lb-stats .s i{font-style:normal;font-size:clamp(14px,4.5vw,24px);color:#e8c76a}
-.lb-stats .s small{display:block;font-size:clamp(9px,2.4vw,12px);color:#cdbf98;font-weight:500}
-.lb-stats .s b{font-size:clamp(13px,4vw,20px);color:#fff}
-.lb-tabs{left:0;right:0;bottom:0;height:calc(10.4% + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);background:linear-gradient(180deg,#0b1220,#050914);border-top:2px solid #6b4d12}
-.lb-tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#9a8f72;font-size:clamp(10px,2.8vw,14px);font-weight:700;border-right:1px solid #1e2740}
-.lb-tabs button:last-child{border-right:0}
-.lb-tabs button i{font-style:normal;font-size:1.6em;line-height:1}
-.lb-tabs button.on{color:#7fe3ff;text-shadow:0 0 10px #3fd0ff}
-/* 寬螢幕／橫式：圖片會被裁，改成置中面板排版 */
+.lb-row3{left:3%;width:94%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2%}
+.lb-row3.mid{top:62.8%;height:8.0%}
+.lb-row3.bottom{top:82.0%;height:8.6%}
+.lb-card{display:flex;align-items:center;gap:6px;padding:0 6px;border:2px solid #e8c76a;border-radius:6px;background:linear-gradient(180deg,#14100a,#0a0704);box-shadow:0 0 0 1px #6b4d12,inset 0 0 18px rgba(0,0,0,.7);clip-path:polygon(4% 0,96% 0,100% 12%,100% 88%,96% 100%,4% 100%,0 88%,0 12%);text-align:left;color:#f3e7c3;min-width:0}
+.lb-card .ic{width:1.9em;height:1.9em;flex:none;display:grid;place-items:center;border:1px solid #e8c76a;border-radius:50%;background:#1a1408;font-size:clamp(12px,3.4vw,18px)}
+.lb-card>div{min-width:0}
+.lb-card b{display:block;font-size:clamp(12px,3.6vw,18px);letter-spacing:.06em;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-card small{display:block;font-size:clamp(9px,2.4vw,12px);color:#cdbf98;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-card .arrow{margin-left:auto;color:#e8c76a;font-size:1.2em;flex:none}
+.lb-card.prog{background:linear-gradient(180deg,#0f1a18,#0a0704)}
+.lb-card.prog .ic{color:#e8c76a}
+.lb-card.prog b{color:#fff}
+.lb-card .dots{display:flex;gap:3px;margin-top:2px}
+.lb-card .dots i{width:7px;height:7px;border-radius:50%;border:1px solid #e8c76a;background:transparent}
+.lb-card .dots i.on{background:#e8c76a}
+.lb-gems{left:3%;width:94%;top:73.1%;height:7.2%;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;border:2px solid #e8c76a;border-radius:6px;background:linear-gradient(180deg,#14100a,#0a0704);box-shadow:0 0 0 1px #6b4d12;clip-path:polygon(2% 0,98% 0,100% 20%,100% 80%,98% 100%,2% 100%,0 80%,0 20%);padding:0 2%}
+.lb-gems .s{display:flex;align-items:center;gap:6px;justify-content:center;border-right:1px solid #6b4d12;height:70%;min-width:0}
+.lb-gems .s:last-child{border-right:0}
+.lb-gems .s svg{width:clamp(18px,5.5vw,30px);height:auto;flex:none;filter:drop-shadow(0 0 4px rgba(255,255,255,.35))}
+.lb-gems .s em{font-style:normal;font-size:clamp(16px,5vw,28px);flex:none}
+.lb-gems .s small{display:block;font-size:clamp(9px,2.4vw,12px);color:#cdbf98;font-weight:500;white-space:nowrap}
+.lb-gems .s b{display:block;font-size:clamp(13px,4vw,20px);color:#fff;line-height:1.1}
+/* 直式：用圖上原生 UI，元素只當透明可點區域；座標以原圖 1024 寬為基準（cqw 不受捲軸影響） */
+@media (max-aspect-ratio:7/10){
+  .lobby{container-type:size;--k:calc(100cqw / 1024)}
+  .lb-bg{background:url("__LOBBYBG__") center top / 100% auto no-repeat,#050403}
+  .lb-shade{background:linear-gradient(180deg,transparent 78%,rgba(0,0,0,.7) 100%)}
+  .lb-gear{right:auto;aspect-ratio:auto;background:none;border:0;box-shadow:none;color:transparent;clip-path:none;font-size:0}
+  .lb-start{text-shadow:none}
+  .lb-start .hex,.lb-start .ic,.lb-start .txt,.lb-start::before{display:none}
+  .lb-start:active,.lb-card:active{transform:none;filter:brightness(1.3)}
+  .lb-row3{display:contents}
+  .lb-card{position:absolute;background:none;border:0;box-shadow:none;clip-path:none;padding:0}
+  .lb-card>div{display:contents}
+  .lb-card .ic,.lb-card .arrow,.lb-card b:not(.live),.lb-card small:not(.live){display:none}
+  .lb-card .live{position:absolute;display:block;line-height:1;white-space:nowrap;overflow:visible;font-family:"Noto Sans TC",sans-serif}
+  .lb-gear{left:calc(868 * var(--k));top:calc(8 * var(--k));width:calc(72 * var(--k));height:calc(68 * var(--k))}
+  .lb-start{left:calc(245 * var(--k));top:calc(647 * var(--k));width:calc(536 * var(--k));height:calc(175 * var(--k))}
+  #lb-team{left:calc(66 * var(--k));top:calc(908 * var(--k));width:calc(312 * var(--k));height:calc(118 * var(--k))}
+  #lb-modecard{left:calc(409 * var(--k));top:calc(908 * var(--k));width:calc(304 * var(--k));height:calc(118 * var(--k))}
+  #lb-set{left:calc(749 * var(--k));top:calc(908 * var(--k));width:calc(211 * var(--k));height:calc(118 * var(--k))}
+  #lb-log{left:calc(69 * var(--k));top:calc(1203 * var(--k));width:calc(241 * var(--k));height:calc(98 * var(--k))}
+  #lb-prog{left:calc(363 * var(--k));top:calc(1168 * var(--k));width:calc(349 * var(--k));height:calc(144 * var(--k))}
+  #lb-bag{left:calc(715 * var(--k));top:calc(1203 * var(--k));width:calc(238 * var(--k));height:calc(98 * var(--k))}
+  .lb-gems{left:calc(63 * var(--k));top:calc(1058 * var(--k));width:calc(898 * var(--k));height:calc(108 * var(--k))}
+  #lb-team-s{left:35%;top:55%;font-size:calc(22 * var(--k));font-weight:500;color:#d8cba6;letter-spacing:.02em}
+  #lb-mode-s{left:34%;top:55%;font-size:calc(22 * var(--k));font-weight:500;color:#d8cba6;letter-spacing:.02em}
+  #lb-prog-t{left:30%;top:47%;font-size:calc(30 * var(--k));font-weight:700;color:#fff}
+  #lb-dots{left:30%;top:76%;display:flex;gap:calc(9 * var(--k))}
+  #lb-dots i{width:calc(13 * var(--k));height:calc(13 * var(--k));border:calc(2 * var(--k)) solid #e8c76a;background:transparent}
+  #lb-dots i.on{background:#e8c76a}
+  .lb-gems{display:block;background:none;border:0;box-shadow:none;clip-path:none;padding:0;pointer-events:none}
+  .lb-gems .s{position:absolute;top:49%;height:32%;width:11%;border:0;justify-content:flex-start;display:block}
+  .lb-gems .s svg,.lb-gems .s em,.lb-gems .s small{display:none}
+  .lb-gems .s b{font-size:calc(30 * var(--k));font-weight:700;color:#fff;line-height:1}
+  .lb-gems .s:nth-child(1){left:13.4%}.lb-gems .s:nth-child(2){left:38%}.lb-gems .s:nth-child(3){left:61.9%}.lb-gems .s:nth-child(4){left:87.2%}
+}
+/* 寬螢幕／橫式：圖片會被裁，改成置中欄位排版（自繪面板） */
 @media (min-aspect-ratio:7/10){
-  .lb-bg{background-position:center 30%}
-  .lb-shade{background:rgba(0,0,0,.55)}
-  .lb-title{display:block;top:9%}
-  .lb-cave{display:none}
-  .lb-mode{top:46%;height:12%;left:30%;width:40%}
-  .lb-start{top:61%;height:12%;left:30%;width:40%}
-  .lb-stats{top:77%;height:9%;left:20%;width:60%}
+  .lb-bg{background-size:cover;background-position:center 25%}
+  .lb-shade{background:rgba(0,0,0,.5)}
+  .lb-title{display:block;top:6%}
+  .lb-start{top:34%;height:14%;left:30%;width:40%}
+  .lb-row3.mid{top:52%;height:11%;left:15%;width:70%}
+  .lb-gems{top:66%;height:10%;left:15%;width:70%}
+  .lb-row3.bottom{top:79%;height:11%;left:15%;width:70%}
 }
 @media (min-aspect-ratio:7/10) and (max-height:560px){
-  .lb-title{top:4%}.lb-title .zh{font-size:clamp(28px,8vh,48px)}
-  .lb-mode{top:40%;height:16%}.lb-start{top:59%;height:16%}.lb-stats{top:78%;height:11%}
+  .lb-title{top:2%}.lb-title .zh{font-size:clamp(26px,8vh,44px)}
+  .lb-start{top:28%;height:17%}.lb-row3.mid{top:49%;height:14%}.lb-gems{top:66%;height:13%}.lb-row3.bottom{top:82%;height:14%}
 }
 
 /* ===== 覆蓋層 ===== */
@@ -470,19 +508,20 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 <div class="lobby" id="lobby">
   <div class="lb-bg"></div>
   <div class="lb-shade"></div>
-  <div class="lb-brand"><span class="lb-gem">◆</span><span>INCAN GOLD<small>DIAMANT ·</small></span></div>
   <button class="lb-gear" id="lb-gear" title="設定">⚙</button>
   <div class="lb-title"><div class="zh">印加寶藏</div><div class="en">INCAN GOLD · DIAMANT</div></div>
-  <div class="lb-card lb-cave"><span class="ic">▲</span><div><b>神秘洞窟</b><small>五座洞穴・等你探索</small></div><span class="arrow">›</span></div>
-  <button class="lb-card lb-mode" id="lb-mode"><span class="ic">👥</span><div><b id="lb-mode-t">單人冒險</b><small id="lb-mode-s">你 ＋ 3 名 AI 探險家</small></div><span class="arrow">⇄</span></button>
-  <button class="lb-start" id="btn-start"><span class="hex"></span><span class="txt">◆ 開始探險</span></button>
-  <div class="lb-stats" id="lb-stats"></div>
-  <nav class="lb-tabs">
-    <button class="on" data-tab="home"><i>⌂</i>首頁</button>
-    <button data-tab="party"><i>👥</i>隊伍</button>
-    <button data-tab="stats"><i>▤</i>紀錄</button>
-    <button data-tab="settings"><i>⚙</i>設定</button>
-  </nav>
+  <button class="lb-start" id="btn-start"><span class="hex"></span><span class="ic">▲</span><span class="txt"><b>開始探險</b><small>進入神廟・尋找寶藏</small></span></button>
+  <div class="lb-row3 mid">
+    <button class="lb-card" id="lb-team"><span class="ic">👥</span><div><b>隊伍</b><small class="live" id="lb-team-s">你＋3 名 AI 探險家</small></div><span class="arrow">›</span></button>
+    <button class="lb-card" id="lb-modecard"><span class="ic">📜</span><div><b>冒險模式</b><small class="live" id="lb-mode-s">單人冒險・點擊切換</small></div><span class="arrow">›</span></button>
+    <button class="lb-card" id="lb-set"><span class="ic">⚙</span><div><b>設定</b><small>規則・AI・時限</small></div><span class="arrow">›</span></button>
+  </div>
+  <div class="lb-gems" id="lb-stats"></div>
+  <div class="lb-row3 bottom">
+    <button class="lb-card" id="lb-log"><span class="ic">📜</span><div><b>探險紀錄</b><small>歷史與成就</small></div><span class="arrow">›</span></button>
+    <div class="lb-card prog" id="lb-prog"><span class="ic">🧭</span><div><small>當前進度</small><b class="live" id="lb-prog-t">第 0 / 5 洞窟</b><span class="dots live" id="lb-dots"></span></div></div>
+    <button class="lb-card" id="lb-bag"><span class="ic">🎒</span><div><b>背包</b><small>戰績與寶石</small></div><span class="arrow">›</span></button>
+  </div>
 </div>
 
 <!-- 隊伍／設定／紀錄 視窗（一頁看完） -->
@@ -657,12 +696,14 @@ const AudioEngine = (() => {
 })();
 
 /* ================= STATS ================= */
-const defStats = () => ({ games: 0, p1: 0, p2: 0, ai: 0, best: 0, busts: 0 });
+const defStats = () => ({ games: 0, p1: 0, p2: 0, ai: 0, best: 0, busts: 0, lastRound: 0 });
 function loadStats() { try { return Object.assign(defStats(), JSON.parse(localStorage.getItem(STATS_KEY) || '{}')); } catch (e) { return defStats(); } }
 function saveStats(s) { try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch (e) { } }
+const lbGem = (c) => `<svg viewBox="0 0 100 100"><polygon points="50,4 92,34 50,96 8,34" fill="${c}" stroke="#fff" stroke-width="4" stroke-opacity=".8"/><polyline points="8,34 92,34" stroke="#fff" stroke-opacity=".6" stroke-width="3" fill="none"/><polygon points="50,4 30,4 22,34 50,34" fill="#fff" fill-opacity=".35"/></svg>`;
 function renderStats() {
   const s = loadStats();
-  $('#lb-stats').innerHTML = `<div class="s"><i>🏆</i><div><small>探險紀錄</small><b>${s.games} 次</b></div></div><div class="s"><i>💎</i><div><small>單場最高</small><b>${s.best} 顆</b></div></div><div class="s"><i>🔥</i><div><small>勝場 P1／AI</small><b>${s.p1}／${s.ai}</b></div></div>`;
+  $('#lb-stats').innerHTML = `<div class="s">${lbGem('#2fd47a')}<div><small>探險場數</small><b>${s.games}</b></div></div><div class="s">${lbGem('#ff3b4a')}<div><small>爆掉次數</small><b>${s.busts}</b></div></div><div class="s">${lbGem('#bfe9ff')}<div><small>單場最高</small><b>${s.best}</b></div></div><div class="s"><em>🗿</em><div><small>P1 勝場</small><b>${s.p1}</b></div></div>`;
+  const lr = s.lastRound || 0; $('#lb-prog-t').textContent = lr ? `第 ${lr} / 5 洞窟` : '尚未出發'; $('#lb-dots').innerHTML = [1, 2, 3, 4, 5].map(i => `<i class="${i <= lr ? 'on' : ''}"></i>`).join('');
   $('#stats').innerHTML = [['探險場數', s.games], ['P1 勝場', s.p1], ['P2 勝場', s.p2], ['AI 勝場', s.ai], ['單場最高', s.best], ['爆掉次數', s.busts]].map(([l, v]) => `<div class="stat"><span>${l}</span><b>${v}</b></div>`).join('');
 }
 
@@ -1090,6 +1131,7 @@ async function revealChoices() {
 function finishCaveAll() { inCave().forEach(p => { p.gained = p.round; p.tent += p.round; p.round = 0; p.inCave = false; p.status = 'out'; }); renderPlayers(); endRound(false); }
 function endRound(busted) {
   if (!G.running) return;
+  { const st = loadStats(); st.lastRound = G.round; saveStats(st); }
   G.phase = 'roundEnd'; hideDecision(); renderPlayers(); renderTop();
   const last = G.round >= 5;
   const rows = [...G.players].sort((a, b) => b.tent - a.tent).map((p, i) => `<div class="r" style="--pc:${p.color}"><span>${i === 0 ? '▶' : ''}</span><span class="nm">${p.name}<small>${p.status === 'bust' ? '被陷阱埋葬' : p.gained > 0 ? '平安回營' : '空手回營'}</small></span>${p.status === 'bust' ? `<span class="d minus">−${p.lost}</span>` : `<span class="d plus">＋${p.gained}</span>`}<span class="sc">${p.tent}</span></div>`).join('');
@@ -1144,7 +1186,7 @@ function renderLobby() {
   $$('#mode-seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === G.mode));
   $$('#timer-seg button').forEach(b => b.classList.toggle('on', +b.dataset.t === G.timeLimit));
   $$('#tact-seg button').forEach(b => b.classList.toggle('on', b.dataset.a === G.timeoutAction)); $('#tact-seg').style.opacity = G.timeLimit ? 1 : .45;
-  $('#lb-mode-t').textContent = G.mode === 'solo' ? '單人冒險' : '雙人冒險'; $('#lb-mode-s').textContent = G.mode === 'solo' ? '你 ＋ 3 名 AI 探險家' : 'P1 ＋ P2 ＋ 2 名 AI・同裝置輪流';
+  $('#lb-mode-s').textContent = G.mode === 'solo' ? '單人冒險・點擊切換' : '雙人冒險・點擊切換'; $('#lb-team-s').textContent = G.mode === 'solo' ? '你＋3 名 AI 探險家' : 'P1＋P2＋2 名 AI';
   const nAI = G.mode === 'duo' ? 2 : 3;
   $('#lv-rows').innerHTML = CLASSES.slice(4 - nAI).map((a, i) => `<span class="nm" style="color:${a.color}">${a.name}</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}</option>`).join('')}</select>`).join('');
   $$('#lv-rows select').forEach(s => s.onchange = () => { G.levels[+s.dataset.i] = +s.value; AudioEngine.sfx('cursor'); });
@@ -1152,12 +1194,16 @@ function renderLobby() {
   renderStats();
 }
 $('#mode-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.mode = b.dataset.mode; AudioEngine.sfx('cursor'); renderLobby(); });
-$('#lb-mode').onclick = () => { G.mode = G.mode === 'solo' ? 'duo' : 'solo'; AudioEngine.sfx('cursor'); renderLobby(); };
+$('#lb-modecard').onclick = () => { G.mode = G.mode === 'solo' ? 'duo' : 'solo'; AudioEngine.sfx('cursor'); renderLobby(); };
+$('#lb-team').onclick = () => openSettings('隊伍：AI 智慧階層');
+$('#lb-set').onclick = () => openSettings('設定');
+$('#lb-log').onclick = () => openSettings('探險紀錄');
+$('#lb-bag').onclick = () => openSettings('背包：戰績與寶石');
 function openSettings(title) { $('#settings-h').textContent = title || '隊伍與設定'; $('#settings').hidden = false; renderLobby(); }
 $('#lb-gear').onclick = () => openSettings('設定');
 $('#lv-help-btn').onclick = () => { const l = $('#lv-legend'); l.hidden = !l.hidden; };
 $('#settings-ok').onclick = () => { $('#settings').hidden = true; AudioEngine.sfx('lock'); };
-$$('.lb-tabs button').forEach(b => b.onclick = () => { $$('.lb-tabs button').forEach(x => x.classList.toggle('on', x === b)); AudioEngine.sfx('cursor'); const t = b.dataset.tab; if (t === 'party') openSettings('隊伍：AI 智慧階層'); else if (t === 'stats') openSettings('冒險紀錄'); else if (t === 'settings') openSettings('設定'); });
+
 $('#timer-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.timeLimit = +b.dataset.t; try { localStorage.setItem(TL_KEY, G.timeLimit); } catch (err) { } AudioEngine.sfx('cursor'); renderLobby(); });
 $('#tact-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.timeoutAction = b.dataset.a; try { localStorage.setItem(TA_KEY, G.timeoutAction); } catch (err) { } AudioEngine.sfx('cursor'); renderLobby(); });
 $('#btn-start').onclick = () => { AudioEngine.sfx('lock'); startGame(); };
