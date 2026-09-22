@@ -94,9 +94,10 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 
 /* ===== 場景 ===== */
 .scene{position:relative;width:100%;aspect-ratio:16/8.6;max-height:52dvh;min-height:150px;border:4px solid var(--line);border-radius:10px;overflow:hidden;background:#1a1210;image-rendering:pixelated;box-shadow:0 0 0 2px #000}
-.scene canvas.bg{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;display:block}
+.scene img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;image-rendering:pixelated;display:block;transition:opacity .5s}
+.scene img.bg.fade{opacity:0}
 .scene svg.cave{position:absolute;inset:0;width:100%;height:100%;shape-rendering:crispEdges}
-.scene.turn canvas.bg{animation:turnaround 1.3s ease-in-out both}
+.scene.turn img.bg{animation:turnaround 1.3s ease-in-out both}
 @keyframes turnaround{0%{transform:translateX(0)}40%{transform:translateX(38%) scale(1.08)}60%{transform:translateX(38%) scale(1.08)}100%{transform:translateX(0)}}
 .scene.turn #current-card,.scene.turn .pathwin{animation:fadeout 1.3s ease-in-out both}
 @keyframes fadeout{0%{opacity:1}30%{opacity:0}70%{opacity:0}100%{opacity:1}}
@@ -476,7 +477,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   </header>
 
   <section class="scene" id="scene">
-      <canvas class="bg" id="bgc" width="192" height="108"></canvas>
+      <img class="bg" id="bgimg" alt="" decoding="async">
       <div class="vig"></div>
       <div class="altar-hint" id="altar-hint">你站在洞穴入口，祭壇上還沒有牌<br><small>按「出發」開始探險</small></div>
       <div id="current-card"></div>
@@ -780,57 +781,16 @@ function drawFace(cv, cls) {
   cls.map.forEach((row, y) => [...row].forEach((ch, x) => { const c = cls.pal[ch]; if (c) { ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); } }));
 }
 
-/* ================= DQ 像素洞窟背景：五座洞穴各一種，依場景長寬比重繪 ================= */
-const CAVE_THEMES = [
-  { name: '岩洞', bg: '#1a1210', wall: '#6b4a2a', wallD: '#4a3119', wallL: '#8c6a3f', floor: '#7d5a33', floorD: '#5c4022', floorL: '#9a7446', deco: 'torch' },
-  { name: '水晶地下河', bg: '#0b1a2e', wall: '#2d4a6b', wallD: '#1c3049', wallL: '#3f6a94', floor: '#3a5c7d', floorD: '#26405a', floorL: '#4f7aa3', deco: 'crystal' },
-  { name: '印加石殿', bg: '#1c1a12', wall: '#8a7a55', wallD: '#5e5238', wallL: '#a89a70', floor: '#7d7050', floorD: '#5a5038', floorL: '#9a8c66', deco: 'temple' },
-  { name: '熔岩洞', bg: '#1a0705', wall: '#5a2a1e', wallD: '#3a1610', wallL: '#7a3d2a', floor: '#4a2418', floorD: '#2e150d', floorL: '#66321f', deco: 'lava' },
-  { name: '黃金寶庫', bg: '#1a1408', wall: '#7a5c1c', wallD: '#4f3a10', wallL: '#a3802c', floor: '#6b5218', floorD: '#4a380f', floorL: '#8c6c22', deco: 'gold' },
-];
+/* ================= 像素洞窟圖庫：12 張，每局隨機抽 5 張不重複 ================= */
+const CAVE_IMGS = [__CAVE01__, __CAVE02__, __CAVE03__, __CAVE04__, __CAVE05__, __CAVE06__, __CAVE07__, __CAVE08__, __CAVE09__, __CAVE10__, __CAVE11__, __CAVE12__].map(d => 'data:image/jpeg;base64,' + d);
+const CAVE_NAMES = ['水晶岩洞', '螢光蘑菇洞', '熔岩洞', '極光冰河洞', '遺跡神殿', '星空水簾洞', '符文紅岩洞', '紫雷裂谷', '苔蘚幽林洞', '火把隧道', '水母深淵', '翡翠洞窟'];
+const CAVE_THEMES = CAVE_NAMES.map(name => ({ name }));
+function pickCaves() { G.caveSet = shuffle([...Array(CAVE_IMGS.length).keys()]).slice(0, 5); }
+function caveIndex() { if (!G.caveSet) pickCaves(); return G.caveSet[Math.max(0, (G.round || 1) - 1) % 5]; }
 function drawBackground() {
-  const sc = $('#scene'), cv = $('#bgc'); if (!sc.clientWidth) return;
-  const th = CAVE_THEMES[Math.max(0, (G.round || 1) - 1) % 5];
-  const W = 192, H = Math.max(80, Math.round(W * sc.clientHeight / sc.clientWidth)); cv.width = W; cv.height = H;
-  const g = cv.getContext('2d'); let seed = 11 + (G.round || 1) * 7; const R = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-  const rect = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(x | 0, y | 0, w | 0, h | 0); };
-  const px = (x, y, c) => rect(x, y, 1, 1, c);
-  const horizon = Math.round(H * .62);
-  rect(0, 0, W, H, th.bg);
-  for (let y = 0; y < horizon; y++) for (let x = 0; x < W; x++) { const r = R(); px(x, y, r < .08 ? th.wallL : r < .2 ? th.wallD : th.wall); }
-  if (th.deco === 'temple' || th.deco === 'gold') { for (let y = 8; y < horizon; y += 10) { rect(0, y, W, 1, th.wallD); for (let x = (y / 10 % 2) * 12; x < W; x += 24) rect(x, y, 1, 10, th.wallD); } }
-  for (let i = 0; i < 14; i++) { const cx = R() * W, h = 8 + R() * 16, w = 3 + R() * 4; for (let y = 0; y < h; y++) { const ww = Math.max(1, w * (1 - y / h)); rect(cx - ww / 2, y, ww, 1, y % 4 === 0 ? th.wallD : th.bg); px(cx - ww / 2, y, th.wallD); } }
-  rect(0, 0, W, 4, th.bg); rect(0, 4, W, 1, th.wallD);
-  for (let y = horizon; y < H; y++) for (let x = 0; x < W; x++) { const r = R(); px(x, y, r < .06 ? th.floorL : r < .16 ? th.floorD : th.floor); }
-  rect(0, horizon, W, 2, th.floorD); rect(0, horizon + 2, W, 1, th.floorL);
-  if (th.deco === 'temple' || th.deco === 'gold') { for (let y = horizon + 6; y < H; y += 8) rect(0, y, W, 1, th.floorD); for (let x = 0; x < W; x += 16) rect(x, horizon, 1, H - horizon, th.floorD); }
-  const torch = (x, y) => { rect(x, y, 3, 14, '#5a3a12'); rect(x - 1, y - 4, 5, 4, '#ff8a1a'); rect(x, y - 7, 3, 3, '#ffd23a'); rect(x + 1, y - 9, 1, 2, '#ffe97a'); for (let i = 0; i < 40; i++) { const a = R() * Math.PI * 2, d = R() * 12; px(x + 1 + Math.cos(a) * d, y - 5 + Math.sin(a) * d * .6, R() < .5 ? '#ff9a2a' : '#ffc060'); } };
-  const pillar = (x, c1, c2) => { rect(x, 6, 10, horizon - 6, c1); rect(x, 6, 2, horizon - 6, c2); rect(x + 8, 6, 2, horizon - 6, c2); rect(x - 2, 6, 14, 3, c2); rect(x - 2, horizon - 3, 14, 3, c2); for (let y = 12; y < horizon - 6; y += 9) rect(x + 3, y, 4, 2, c2); };
-  const sun = (cx, cy, r, c1, c2) => { for (let a = 0; a < 16; a++) { const dx = Math.cos(a * Math.PI / 8), dy = Math.sin(a * Math.PI / 8); for (let d = r; d < r + 6; d++) px(cx + dx * d, cy + dy * d, a % 2 ? c1 : c2); } for (let y = -r; y <= r; y++) for (let x = -r; x <= r; x++) if (x * x + y * y <= r * r) px(cx + x, cy + y, x * x + y * y < (r - 2) * (r - 2) ? c1 : c2); px(cx - 2, cy - 1, th.wallD); px(cx + 2, cy - 1, th.wallD); rect(cx - 2, cy + 2, 5, 1, th.wallD); };
-  if (th.deco === 'torch') { torch(Math.round(W * .18), Math.round(horizon * .45)); torch(Math.round(W * .82), Math.round(horizon * .45)); }
-  if (th.deco === 'crystal') {
-    const cry = (x, y, h, c1, c2) => { for (let i = 0; i < h; i++) { const w = Math.max(1, 5 * (1 - i / h)); rect(x - w / 2, y - i, w, 1, i % 4 === 0 ? c2 : c1); } px(x, y - h, '#ffffff'); };
-    for (let i = 0; i < 9; i++) { const x = R() * W, base = horizon - 1 + R() * 3, h = 8 + R() * 18; cry(x, base, h, R() < .5 ? '#6fd7ff' : '#b58cff', '#e6f7ff'); }
-    for (let i = 0; i < 6; i++) { const x = R() * W, h = 6 + R() * 10; for (let k = 0; k < h; k++) { const w = Math.max(1, 4 * (1 - k / h)); rect(x - w / 2, 3 + k, w, 1, k % 4 === 0 ? '#e6f7ff' : '#6fd7ff'); } }
-    rect(0, H - 12, W, 12, '#1f5fa0'); rect(0, H - 12, W, 1, '#8fd3ff'); for (let i = 0; i < 40; i++) px(R() * W, H - 11 + R() * 11, R() < .5 ? '#4f9fe0' : '#8fd3ff');
-    for (let i = 0; i < 30; i++) px(R() * W, R() * horizon, R() < .5 ? '#6fd7ff' : '#ffffff');
-  }
-  if (th.deco === 'temple') { pillar(Math.round(W * .1), th.wallL, th.wallD); pillar(Math.round(W * .84), th.wallL, th.wallD); sun(Math.round(W / 2), Math.round(horizon * .4), 10, '#d9a93a', '#8a6a1e'); torch(Math.round(W * .26), Math.round(horizon * .5)); torch(Math.round(W * .72), Math.round(horizon * .5)); }
-  if (th.deco === 'lava') {
-    for (let i = 0; i < 26; i++) { const x = R() * W, y = R() * horizon, c = R() < .5 ? '#ff5a1a' : '#ff9a2a'; px(x, y, c); if (R() < .5) px(x + 1, y, c); }
-    rect(0, H - 14, W, 14, '#ff6a1a'); rect(0, H - 14, W, 2, '#ffd23a'); for (let i = 0; i < 60; i++) { const x = R() * W, y = H - 12 + R() * 12; rect(x, y, 1 + R() * 3, 1, R() < .5 ? '#ffb23a' : '#c83a10'); }
-    for (let x = 0; x < W; x += 7) rect(x, H - 15 - R() * 3, 3, 2, '#3a1610');
-    for (let i = 0; i < 5; i++) { const x = R() * W, y = horizon - 2 - R() * 20; for (let k = 0; k < 14; k++) { const w = Math.max(1, 4 - k * .3); rect(x - w / 2, y + k, w, 1, k % 3 ? '#ff6a1a' : '#ffd23a'); } }
-  }
-  if (th.deco === 'gold') {
-    pillar(Math.round(W * .08), '#d9a93a', '#8a6a1e'); pillar(Math.round(W * .87), '#d9a93a', '#8a6a1e'); sun(Math.round(W / 2), Math.round(horizon * .38), 12, '#ffd23a', '#b8860b');
-    const pile = (cx, cy, r) => { for (let y = 0; y < r; y++) { const w = (r - y) * 2.2; rect(cx - w / 2, cy - y, w, 1, y % 2 ? '#e0b030' : '#ffd23a'); } for (let i = 0; i < r * 3; i++) px(cx + (R() - .5) * r * 2, cy - R() * r * .8, R() < .5 ? '#fff3a0' : '#b8860b'); };
-    pile(Math.round(W * .2), H - 8, 10); pile(Math.round(W * .8), H - 6, 12); pile(Math.round(W * .32), H - 4, 6); pile(Math.round(W * .66), H - 5, 7);
-    for (let i = 0; i < 30; i++) px(R() * W, horizon + R() * (H - horizon), '#fff3a0');
-    torch(Math.round(W * .24), Math.round(horizon * .5)); torch(Math.round(W * .74), Math.round(horizon * .5));
-  }
-  const pw = Math.round(W * .34), pxx = Math.round((W - pw) / 2), py = Math.round(H * .74);
-  rect(pxx - 6, py + 8, pw + 12, 2, th.floorD); rect(pxx, py, pw, 8, '#7a7f86'); rect(pxx, py, pw, 2, '#a6acb3'); rect(pxx + 2, py + 8, pw - 4, 3, '#4d5157'); for (let x = pxx + 4; x < pxx + pw - 4; x += 6) rect(x, py + 3, 2, 2, '#4d5157');
+  const img = $('#bgimg'); const src = CAVE_IMGS[caveIndex()]; if (img.dataset.src === src) return;
+  img.classList.add('fade'); const swap = () => { img.src = src; img.dataset.src = src; img.onload = () => img.classList.remove('fade'); };
+  REDUCED ? swap() : setTimeout(swap, 120);
 }
 addEventListener('resize', drawBackground);
 
@@ -870,7 +830,7 @@ function renderPlayers() {
 }
 function renderTop() {
   $('#ui-round').textContent = G.round || '–'; $('#ui-deck').textContent = G.deck.length;
-  $('#cave-title').textContent = 'CAVE ' + (ROMAN[G.round] || '') + (G.round ? ` ${CAVE_THEMES[(G.round - 1) % 5].name}　洞穴內 ${inCave().length} 人` : '');
+  $('#cave-title').textContent = 'CAVE ' + (ROMAN[G.round] || '') + (G.round ? ` ${CAVE_NAMES[caveIndex()]}　洞穴內 ${inCave().length} 人` : '');
   $('#hz-track').innerHTML = HZ_KEYS.map(t => `<span class="hz" data-n="${G.shown[t] || 0}" ${G.removed[t] ? 'data-removed="1"' : ''} title="${HAZARDS[t].name}：已出 ${G.shown[t] || 0} 張${G.removed[t] ? `，牌庫已移除 ${G.removed[t]} 張` : ''}">${HAZARDS[t].icon}<span class="cnt">${G.shown[t] || 0}</span></span>`).join('');
   $('#path-gems').textContent = pathTotal();
 }
@@ -1011,7 +971,7 @@ function countUp(el, target) {
 
 /* ================= GAME FLOW ================= */
 function startGame() {
-  setupPlayers(); G.round = 0; G.removed = {}; Msg.clear(); G.running = true; delete $('#decision').dataset.pid;
+  setupPlayers(); G.round = 0; G.removed = {}; Msg.clear(); G.running = true; pickCaves(); delete $('#decision').dataset.pid;
   $('#lobby').hidden = true; G.phase = 'play'; $('#altar-hint').hidden = true;
   log(`探險隊出發：${G.players.map(p => p.name).join('、')}`);
   nextRound();
@@ -1024,7 +984,7 @@ async function nextRound() {
   renderPlayers(); renderTop(); renderPath(); drawBackground();
   if (!G.running) return;
   AudioEngine.sfx('round'); toast(`第 ${ROMAN[G.round]} 座洞穴<small>CAVE ${ROMAN[G.round]}</small>`);
-  await log(`來到了第 ${G.round} 座洞穴。牌庫 ${G.deck.length} 張。`);
+  await log(`來到了第 ${G.round} 座洞穴「${CAVE_NAMES[caveIndex()]}」。牌庫 ${G.deck.length} 張。`);
   await wait(REDUCED ? 300 : 1200);
   revealCard();
 }

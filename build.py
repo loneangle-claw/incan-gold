@@ -12,6 +12,9 @@ out = (src.replace('__GLITTER__', uri('glitter.png'))
           .replace('__ILLUSION__', uri('illusion.png'))
           .replace('__ILLUSION_MASK__', uri('illusion-mask.png'))
           .replace('__LOBBYBG__', uri('lobby.jpg', 'image/jpeg')))
+for n in range(1, 13):  # 12 張洞窟切片：JS 陣列裡的裸 base64 字串
+    f = root / 'textures' / f'cave{n:02d}.jpg'
+    if f.exists(): out = out.replace(f'__CAVE{n:02d}__', "'" + base64.b64encode(f.read_bytes()).decode() + "'")
 assert '__' + 'GLITTER__' not in out
 (root / 'index.html').write_text(out, encoding='utf-8')
 
