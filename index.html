@@ -479,9 +479,8 @@ input[type=range]{accent-color:var(--yellow);width:70px}
       <button class="ib" id="bgm-toggle" title="播放 / 暫停背景音樂">♪ 播放</button>
       <span class="eq"><i></i><i></i><i></i></span>
       <select id="bgm-style" title="曲風">
-        <option value="jungle">Sci-Fi Jungle</option>
-        <option value="temple">Ancient Temple</option>
-        <option value="lofi">Lofi Tribal</option>
+        <option value="track1">探險曲 I（3:03）</option>
+        <option value="track2">探險曲 II（1:02）</option>
       </select>
       <input type="range" id="bgm-vol" min="0" max="100" value="55" title="音量">
       <button class="ib" id="sfx-toggle" title="音效開關">效</button>
@@ -572,7 +571,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="seg two acts"><button class="primary" id="settings-ok">完成</button><button id="btn-reset-stats">清除紀錄</button></div>
-    <details class="rules" open><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。<div style="margin-top:6px;color:#666">版本 2026-09-22 · build 19（若手機顯示的版本較舊，請重新整理一次）</div></details>
+    <details class="rules" open><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。<div style="margin-top:6px;color:#666">版本 2026-09-23 · build 20（若手機顯示的版本較舊，請重新整理一次）</div></details>
   </div>
 </div>
 
@@ -642,7 +641,17 @@ const T = REDUCED ? { flip: 200, afterFlip: 300, aiReveal: 500, chip: 500, gap: 
 /* ================= AUDIO ================= */
 const AudioEngine = (() => {
   let ctx, master, musicGain, sfxGain, noiseBuf;
-  let style = 'jungle', playing = false, timer = null, step = 0, live = [], sfxOn = true;
+  let style = 'track1', playing = false, timer = null, step = 0, live = [], sfxOn = true;
+  const TRACKS = { track1: 'music/track1.m4a', track2: 'music/track2.m4a' };
+  let music = null, musicNode = null, musicKey = null;
+  const FILE = location.protocol === 'file:';
+  function ensureMusic() {
+    if (musicKey === style && music) return music;
+    if (music) { music.pause(); music.src = ''; }
+    music = new Audio(TRACKS[style] || TRACKS.track1); music.loop = true; music.preload = 'auto'; musicKey = style;
+    if (!FILE && ctx) { try { musicNode = ctx.createMediaElementSource(music); musicNode.connect(musicGain); } catch (e) { } }
+    return music;
+  }
   function init() {
     if (ctx) return true;
     try {
@@ -710,11 +719,11 @@ const AudioEngine = (() => {
   };
   function loop() { const st = STYLES[style]; const stepSec = 60 / st.bpm / 2; st.step(step++, ctx.currentTime + .03); timer = setTimeout(loop, stepSec * 1000); }
   return {
-    play() { if (!init()) return false; if (ctx.state === 'suspended') ctx.resume(); if (playing) return true; playing = true; step = 0; STYLES[style].start(); loop(); return true; },
-    stop() { playing = false; clearTimeout(timer); killLive(); },
+    play() { if (!init()) return false; if (ctx.state === 'suspended') ctx.resume(); if (playing) return true; playing = true; const m = ensureMusic(); if (FILE) m.volume = master.gain.value; m.play().catch(() => { }); return true; },
+    stop() { playing = false; if (music) music.pause(); },
     toggle() { return playing ? (this.stop(), false) : this.play(); },
     setStyle(s) { style = s; if (playing) { this.stop(); this.play(); } },
-    setVolume(v) { if (init()) master.gain.value = v; },
+    setVolume(v) { if (init()) master.gain.value = v; if (music && FILE) music.volume = v; },
     setSfx(on) { sfxOn = on; },
     get playing() { return playing; },
     sfx(name) {
