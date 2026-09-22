@@ -1,4 +1,3 @@
 artifact.html
-patch_holo.py
-patch_fp.py
+patch_*.py
 .playwright-mcp/
