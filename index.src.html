@@ -149,7 +149,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 @keyframes snake{0%{translate:-260% -50%}100%{translate:-50% -50%}}
 .bustfx.spider .big{animation:spider .9s cubic-bezier(.3,1.4,.4,1) both}
 @keyframes spider{0%{translate:-50% -300%}100%{translate:-50% -50%}}
-.bustfx.mummy .big{animation:mummy 1s steps(6) both}
+.bustfx.mummy .big,.bustfx.scorpion .big{animation:mummy 1s steps(6) both}
 @keyframes mummy{0%{translate:-50% 150%}100%{translate:-50% -50%}}
 .bustfx.fire .big{animation:fire .8s steps(5) both}
 @keyframes fire{0%{scale:0}70%{scale:1.4}100%{scale:1}}
@@ -222,6 +222,12 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .art{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:14% 10% 12%;text-align:center}
 .art .medal{width:62%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#12302c,#061412 70%);box-shadow:0 0 0 2px #b08a3a,0 0 0 4px #3b2a10,0 0 0 5px #d9b45a,inset 0 0 14px #000}
 .hazard .art .medal{background:radial-gradient(circle at 50% 40%,#3a0c0c,#150404 70%)}
+.face.front.artifact{background:radial-gradient(ellipse at 50% 20%,#5a48a8,#2a1f66 60%,#120c33)}
+.artifact .art .medal{background:radial-gradient(circle at 50% 40%,#2a1f66,#0e0a26 70%);box-shadow:0 0 0 2px #e8c76a,0 0 0 4px #3b2a10,0 0 0 5px #ffe79a,inset 0 0 14px #000,0 0 18px rgba(255,231,154,.6)}
+.artifact .art .val{color:#ffe79a;text-shadow:1px 1px 0 #2a1a5a}
+.artifact .art .name{color:#e8d9ff;border-color:#a88ad8;font-size:calc(var(--card-w) * .085)}
+.artifact .corner{color:#ffe79a}
+.left-badge.art{background:#c084fc;color:#fff}
 .art .gem{width:66%;filter:drop-shadow(0 0 5px rgba(255,230,150,.7))}
 .art .icon{font-size:calc(var(--card-w) * .34);line-height:1;filter:drop-shadow(1px 2px 0 #000)}
 .art .val{font-size:calc(var(--card-w) * .24);line-height:1;color:#3b2a10;text-shadow:1px 1px 0 #f5e6b8;margin-top:4%}
@@ -385,6 +391,13 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .lv-table select{width:100%;padding:6px 8px;font-size:14px;border:2px solid #fff;border-radius:6px;background:#000}
 .lv-legend{margin-top:6px;font-size:12px;color:var(--dim);line-height:1.45;border:1px dotted #555;border-radius:6px;padding:6px 8px}
 .lv-legend b{color:var(--yellow);font-weight:700}
+.deck-grid{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 2px}
+.dk{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border:2px solid #fff;border-radius:6px;font-size:14px;line-height:1.3}
+.dk.t{border-color:var(--gold);color:var(--gold)}.dk.h{border-color:#f87171;color:#fca5a5}.dk.a{border-color:#c084fc;color:#e9d5ff}
+.dk small{color:var(--dim);font-size:11px}
+.dk.seen{opacity:.45;text-decoration:line-through}
+.dk.now{box-shadow:0 0 0 2px var(--yellow)}
+.deck-note{font-size:12px;color:var(--dim);line-height:1.4;margin-top:6px}
 .rules{margin-top:10px;font-size:12px;color:var(--dim);line-height:1.45}
 .rules summary{cursor:pointer;color:var(--text)}
 .lv-row{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;padding:4px 0;border-bottom:1px dotted #444}
@@ -459,7 +472,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   <header class="hud win tight">
     <span class="title">印加寶藏</span>
     <span class="pill">洞穴 <b id="ui-round">–</b>／5</span>
-    <span class="pill">牌庫 <b id="ui-deck">–</b></span>
+    <span class="pill">牌庫 <b id="ui-deck">–</b><small id="ui-mix" style="color:var(--dim);margin-left:4px"></small></span>
     <span class="pill">陷阱 <span class="hz-track" id="hz-track"></span></span>
     <div class="bgm" id="bgm">
       <button class="ib" id="bgm-toggle" title="播放 / 暫停背景音樂">♪ 播放</button>
@@ -493,6 +506,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
       <div class="menu" id="cmd-menu">
         <button id="btn-go" data-c="go">前進</button>
         <button id="btn-leave" data-c="leave">撤退</button>
+        <button id="btn-deck" data-c="deck">牌庫</button>
         <button id="btn-log" data-c="log">紀錄</button>
         <button id="btn-quit2" data-c="quit">退出</button>
       </div>
@@ -557,7 +571,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="seg two acts"><button class="primary" id="settings-ok">完成</button><button id="btn-reset-stats">清除紀錄</button></div>
-    <details class="rules"><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶石卡 1·2·3·4·5·5·7·7·9·11·11·13·14·15·17，陷阱五種各三張，爆掉後該張從牌庫移除。</details>
+    <details class="rules"><summary>規則</summary>五座洞穴。每回合所有人同時秘密決定「前進」或「撤退」；翻出第二張相同陷阱，留在洞穴的人本輪寶石全部粉碎。寶藏卡 15 張（1·1·2·2·3·3·4·4·5·5·7·9·11·13·14），危險卡五種各 3 張（落石／毒蛇／火災／巨型蜘蛛／毒蠍），神器 5 張每座洞穴洗入 1 張（前三座 5 分、後兩座 10 分，只有單獨撤退的人能帶走）。每座洞穴 30 張探索卡全部重洗。</details>
   </div>
 </div>
 
@@ -568,6 +582,15 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     <h2 id="handoff-title">P1 選擇完畢</h2>
     <div class="sub" id="handoff-sub">請將裝置移交給 P2 進行秘密決策</div>
     <button class="btn primary" id="handoff-ok">我是 P2，開始決策</button>
+  </div>
+</div>
+
+<!-- 牌庫總表 -->
+<div class="overlay" id="deckwin" hidden>
+  <div class="win dlg set">
+    <h2>牌庫總表（35 張）</h2>
+    <div id="deck-body"></div>
+    <div class="seg two acts" style="margin-top:10px"><button class="primary" id="deck-ok">關閉</button><span></span></div>
   </div>
 </div>
 
@@ -591,13 +614,15 @@ const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
 
 const HAZARDS = {
   snake: { name: '毒蛇', icon: '🐍', bust: '毒蛇咬擊！' },
-  spider: { name: '毒蜘蛛', icon: '🕷️', bust: '蛛網纏身！' },
-  mummy: { name: '木乃伊', icon: '🧟', bust: '木乃伊甦醒！' },
-  fire: { name: '烈焰', icon: '🔥', bust: '烈焰吞噬！' },
+  spider: { name: '巨型蜘蛛', icon: '🕷️', bust: '蛛網纏身！' },
+  scorpion: { name: '毒蠍', icon: '🦂', bust: '毒蠍螫刺！' },
+  fire: { name: '火災', icon: '🔥', bust: '烈焰吞噬！' },
   rock: { name: '落石', icon: '🪨', bust: '巨石滾落！' },
 };
 const HZ_KEYS = Object.keys(HAZARDS);
-const TREASURES = [1, 2, 3, 4, 5, 5, 7, 7, 9, 11, 11, 13, 14, 15, 17];
+const TREASURES = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 7, 9, 11, 13, 14];  // 15 張，總和 92
+const ARTIFACT_DEFS = [{ name: '太陽面具', icon: '🎭' }, { name: '黃金羽蛇', icon: '🐍' }, { name: '翡翠神像', icon: '🗿' }, { name: '印加聖杯', icon: '🏆' }, { name: '神聖權杖', icon: '🔱' }];
+const artifactValue = r => r <= 3 ? 5 : 10;  // 前三座洞穴的神器 5 分、後兩座 10 分
 const LEVELS = {
   1: { n: '極度膽小', en: 'Timid', d: '看到任何 1 張陷阱、或本輪手上 ≥5 顆就撤退。' },
   2: { n: '穩健新手', en: 'Cautious', d: '2 種不同陷阱出現、或洞穴裡只剩自己就撤退。' },
@@ -757,7 +782,8 @@ function setupPlayers() {
 function buildDeck() {
   const d = [];
   TREASURES.forEach(v => d.push({ id: ++cardId, kind: 'treasure', value: v, left: 0 }));
-  HZ_KEYS.forEach(t => { const n = 3 - (G.removed[t] || 0); for (let i = 0; i < n; i++) d.push({ id: ++cardId, kind: 'hazard', type: t }); });
+  HZ_KEYS.forEach(t => { for (let i = 0; i < 3; i++) d.push({ id: ++cardId, kind: 'hazard', type: t }); });
+  const art = G.artifacts && G.artifacts[G.round - 1]; if (art) { art.status = 'deck'; d.push({ id: ++cardId, kind: 'artifact', art }); }
   return shuffle(d);
 }
 
@@ -805,6 +831,7 @@ function cardEl(card, flipped = false) {
   el.className = 'card holo' + (flipped ? ' flipped' : ''); el.dataset.kind = card.kind; el.dataset.id = card.id;
   const front = card.kind === 'treasure'
     ? `<div class="face front treasure" data-foil="holo"><div class="art"><div class="medal">${gemSVG(card.value)}</div><div class="val">${card.value}</div><div class="name">寶石</div></div><span class="corner tl">${card.value}</span><span class="corner br">${card.value}</span>${FRAME}<div class="shine"></div><div class="glare"></div></div>`
+    : card.kind === 'artifact' ? `<div class="face front artifact" data-foil="radiant"><div class="art"><div class="medal"><div class="icon">${card.art.icon}</div></div><div class="val">${card.art.value}</div><div class="name">神器・${card.art.name}</div></div><span class="corner tl">★</span><span class="corner br">★</span>${FRAME}<div class="shine"></div><div class="glare"></div></div>`
     : `<div class="face front hazard" data-foil="radiant"><div class="art"><div class="medal"><div class="icon">${HAZARDS[card.type].icon}</div></div><div class="val">陷阱</div><div class="name">${HAZARDS[card.type].name}</div></div>${FRAME}<div class="shine"></div><div class="glare"></div></div>`;
   el.innerHTML = `<div class="card-tilt"><div class="card-inner"><div class="face back" data-foil="reverse"><div class="sun"></div><div class="sun2"></div>${FRAME}<div class="shine"></div><div class="glare"></div></div>${front}</div></div>`;
   return el;
@@ -830,6 +857,7 @@ function renderPlayers() {
 }
 function renderTop() {
   $('#ui-round').textContent = G.round || '–'; $('#ui-deck').textContent = G.deck.length;
+  { const t = G.deck.filter(c => c.kind === 'treasure').length, h = G.deck.filter(c => c.kind === 'hazard').length, a = G.deck.filter(c => c.kind === 'artifact').length; $('#ui-mix').textContent = G.deck.length ? `寶${t}／陷${h}／神${a}` : ''; }
   $('#cave-title').textContent = 'CAVE ' + (ROMAN[G.round] || '') + (G.round ? ` ${CAVE_NAMES[caveIndex()]}　洞穴內 ${inCave().length} 人` : '');
   $('#hz-track').innerHTML = HZ_KEYS.map(t => `<span class="hz" data-n="${G.shown[t] || 0}" ${G.removed[t] ? 'data-removed="1"' : ''} title="${HAZARDS[t].name}：已出 ${G.shown[t] || 0} 張${G.removed[t] ? `，牌庫已移除 ${G.removed[t]} 張` : ''}">${HAZARDS[t].icon}<span class="cnt">${G.shown[t] || 0}</span></span>`).join('');
   $('#path-gems').textContent = pathTotal();
@@ -838,7 +866,7 @@ function renderPath() {
   const host = $('#path');
   if (!G.pathCards.length) { host.innerHTML = '<span class="path-empty">尚未翻牌</span>'; return; }
   host.innerHTML = '';
-  G.pathCards.forEach(c => { const el = cardEl(c, true); if (c.kind === 'treasure' && c.left > 0) { const b = document.createElement('span'); b.className = 'left-badge'; b.textContent = '+' + c.left; el.appendChild(b); } host.appendChild(el); });
+  G.pathCards.forEach(c => { const el = cardEl(c, true); if (c.kind === 'treasure' && c.left > 0) { const b = document.createElement('span'); b.className = 'left-badge'; b.textContent = '+' + c.left; el.appendChild(b); } if (c.kind === 'artifact' && c.art.status === 'path') { const b = document.createElement('span'); b.className = 'left-badge art'; b.textContent = '神'; el.appendChild(b); } host.appendChild(el); });
   host.scrollLeft = host.scrollWidth;
 }
 
@@ -972,6 +1000,7 @@ function countUp(el, target) {
 /* ================= GAME FLOW ================= */
 function startGame() {
   setupPlayers(); G.round = 0; G.removed = {}; Msg.clear(); G.running = true; pickCaves(); delete $('#decision').dataset.pid;
+  G.artifacts = ARTIFACT_DEFS.map((a, i) => ({ ...a, round: i + 1, value: artifactValue(i + 1), status: 'wait', owner: null }));
   $('#lobby').hidden = true; G.phase = 'play'; $('#altar-hint').hidden = true;
   log(`探險隊出發：${G.players.map(p => p.name).join('、')}`);
   nextRound();
@@ -1004,6 +1033,11 @@ async function revealCard() {
     renderPlayers(); renderPath(); renderTop(); await say;
     await wait(T.gap); return goDecision();
   }
+  if (card.kind === 'artifact') {
+    card.art.status = 'path'; G.pathCards.push(card); AudioEngine.sfx('win');
+    await log(`翻出了神器 <i>${card.art.icon}${card.art.name}</i>（${card.art.value} 分）！只有<b>單獨撤退</b>的人能帶走；多人同時撤退則神器失落。`);
+    renderPath(); renderTop(); await wait(T.gap); return goDecision();
+  }
   G.shown[card.type] = (G.shown[card.type] || 0) + 1; G.pathCards.push(card); AudioEngine.sfx('hazard');
   renderPath(); renderTop();
   if (G.shown[card.type] >= 2) { log(`<u>第二張 ${HAZARDS[card.type].icon}${HAZARDS[card.type].name}！陷阱觸發！</u>`); return bust(card.type); }
@@ -1012,7 +1046,7 @@ async function revealCard() {
 }
 async function bust(type) {
   if (!G.running) return;
-  G.phase = 'bust'; G.removed[type] = (G.removed[type] || 0) + 1;
+  G.phase = 'bust';
   const s = loadStats(); s.busts++; saveStats(s);
   const b = $('#bust'); b.className = 'bustfx on ' + type; $('#bust-icon').textContent = HAZARDS[type].icon;
   AudioEngine.sfx('bust'); const app = $('#app'); app.classList.remove('shake'); void app.offsetWidth; app.classList.add('shake');
@@ -1046,7 +1080,7 @@ function askHuman() {
   showDecision(p);
 }
 let cmdIndex = 0;
-const CMDS = ['go', 'leave', 'log', 'quit'];
+const CMDS = ['go', 'leave', 'deck', 'log', 'quit'];
 function cmdEnabled(i) { const c = CMDS[i]; return (c === 'go' || c === 'leave') ? $('#decision').classList.contains('armed') : true; }
 function showDecision(p) {
   const d = $('#decision'); d.classList.add('armed');
@@ -1061,16 +1095,32 @@ function setCursor(i) {
   if (leave && p) { const pt = pathTotal(); hint.innerHTML = `撤退可帶回 <b>${p.round + pt}</b> 顆（本輪 ${p.round}＋路上 ${pt}）`; }
   else if (CMDS[i] === 'quit') hint.textContent = '直接結束這場探險，回到標題';
   else if (CMDS[i] === 'log') hint.textContent = '顯示／隱藏完整探險紀錄';
+  else if (CMDS[i] === 'deck') hint.textContent = '看牌庫總表與本洞穴已翻出的牌';
   else hint.textContent = d.classList.contains('armed') ? '↑↓ 選擇　Enter 決定' : '';
 }
 function hideDecision() { stopTimer(); const d = $('#decision'); d.classList.remove('armed'); $('#decision-who').textContent = '指令'; $('#app').classList.remove('hl-path'); $$('#cmd-menu button').forEach(b => b.classList.remove('on')); $('#cmd-hint').textContent = ''; }
 function runCmd(c) {
   if (c === 'log') { const l = $('#log'); l.hidden = !l.hidden; l.scrollTop = l.scrollHeight; AudioEngine.sfx('cursor'); return; }
   if (c === 'quit') return quitGame();
+  if (c === 'deck') return openDeckWin();
   onChoice(c);
 }
+function openDeckWin() {
+  AudioEngine.sfx('cursor');
+  const revealed = G.pathCards; const seenT = {}; revealed.filter(c => c.kind === 'treasure').forEach(c => seenT[c.value] = (seenT[c.value] || 0) + 1);
+  const tv = {}; TREASURES.forEach(v => tv[v] = (tv[v] || 0) + 1);
+  const tHtml = Object.keys(tv).map(v => { const n = tv[v], seen = seenT[v] || 0; return `<span class="dk t ${seen >= n ? 'seen' : ''}">💎 ${v}<small>×${n}${seen ? `　已翻 ${seen}` : ''}</small></span>`; }).join('');
+  const hHtml = HZ_KEYS.map(t => { const seen = G.shown[t] || 0; return `<span class="dk h ${seen >= 3 ? 'seen' : ''} ${seen === 1 ? 'now' : ''}">${HAZARDS[t].icon} ${HAZARDS[t].name}<small>×3${seen ? `　已翻 ${seen}` : ''}</small></span>`; }).join('');
+  const arts = G.artifacts || ARTIFACT_DEFS.map((a, i) => ({ ...a, round: i + 1, value: artifactValue(i + 1), status: 'wait' }));
+  const st = { wait: '尚未出場', deck: '在本洞穴牌庫中', path: '在路上（單獨撤退可帶走）', taken: '已被帶走', lost: '已失落' };
+  const aHtml = arts.map(a => `<span class="dk a ${a.status === 'taken' || a.status === 'lost' ? 'seen' : ''} ${a.status === 'path' ? 'now' : ''}">${a.icon} ${a.name}<small>${a.value} 分・第 ${a.round} 座・${st[a.status]}${a.owner ? '（' + a.owner + '）' : ''}</small></span>`).join('');
+  const inDeck = G.deck.length ? `牌庫剩 ${G.deck.length} 張：寶 ${G.deck.filter(c => c.kind === 'treasure').length}／陷 ${G.deck.filter(c => c.kind === 'hazard').length}／神器 ${G.deck.filter(c => c.kind === 'artifact').length}` : '尚未開始';
+  $('#deck-body').innerHTML = `<div class="sec">寶藏卡 15 張（總和 92）</div><div class="deck-grid">${tHtml}</div><div class="sec">危險卡 15 張（五種各 3）</div><div class="deck-grid">${hHtml}</div><div class="sec">神器卡 5 張（每座洞穴洗入 1 張）</div><div class="deck-grid">${aHtml}</div><div class="deck-note">${inDeck}。每座洞穴都把 30 張探索卡全部重洗並加入當座神器（31 張）；同種陷阱第 2 張出現即崩塌。</div>`;
+  $('#deckwin').hidden = false;
+}
+$('#deck-ok') && ($('#deck-ok').onclick = () => { $('#deckwin').hidden = true; });
 function quitGame() {
-  G.running = false; G.phase = 'lobby'; hideDecision(); closeModal(); $('#handoff').hidden = true; $('#log').hidden = true;
+  G.running = false; G.phase = 'lobby'; hideDecision(); closeModal(); $('#handoff').hidden = true; $('#log').hidden = true; $('#deckwin').hidden = true; G.artifacts = null;
   $('#bust').className = 'bustfx'; $('#app').classList.remove('shake'); $('#scene').classList.remove('turn');
   $$('.fx').forEach(e => e.remove()); $$('.toast').forEach(e => e.remove());
   $('#current-card').innerHTML = ''; $('#altar-hint').hidden = false;
@@ -1101,6 +1151,11 @@ async function revealChoices() {
     let need = share * leavers.length;
     for (const c of G.pathCards) { if (need <= 0) break; if (c.kind !== 'treasure') continue; const take = Math.min(c.left, need); c.left -= take; need -= take; }
     for (const p of leavers) { p.gained = p.round + share; p.tent += p.gained; p.inCave = false; p.status = 'out'; log(`<s>${p.name} 撤退</s>，帶回 ${p.round} ＋ 路上 ${share} ＝ <i>${p.gained}</i> 顆。`); }
+    const arts = G.pathCards.filter(c => c.kind === 'artifact' && c.art.status === 'path');
+    if (arts.length) {
+      if (leavers.length === 1) { const p = leavers[0]; arts.forEach(c => { c.art.status = 'taken'; c.art.owner = p.name; p.tent += c.art.value; p.gained += c.art.value; log(`<i>${p.name} 單獨撤退，帶走神器 ${c.art.icon}${c.art.name}（＋${c.art.value}）！</i>`); }); }
+      else { arts.forEach(c => { c.art.status = 'lost'; log(`<u>${leavers.length} 人同時撤退，神器 ${c.art.icon}${c.art.name} 失落了。</u>`); }); }
+    }
     for (let i = 0; i < leavers.length; i++) { const p = leavers[i]; p.round = 0; await animateRetreat(p, share); }
     renderPlayers(); renderPath(); renderTop();
   }
@@ -1110,6 +1165,8 @@ async function revealChoices() {
 function finishCaveAll() { inCave().forEach(p => { p.gained = p.round; p.tent += p.round; p.round = 0; p.inCave = false; p.status = 'out'; }); renderPlayers(); endRound(false); }
 function endRound(busted) {
   if (!G.running) return;
+  G.pathCards.filter(c => c.kind === 'artifact' && c.art.status === 'path').forEach(c => { c.art.status = 'lost'; log(`<u>神器 ${c.art.icon}${c.art.name} 留在洞穴裡失落了。</u>`); });
+  if (G.artifacts) { const a = G.artifacts[G.round - 1]; if (a && a.status === 'deck') a.status = 'lost'; }
   { const st = loadStats(); st.lastRound = G.round; saveStats(st); }
   G.phase = 'roundEnd'; hideDecision(); renderPlayers(); renderTop();
   const last = G.round >= 5;
@@ -1141,7 +1198,7 @@ function aiDecide(p) {
     case 1: return (shownTypes.length >= 1 || p.round >= 5 + gb) ? 'leave' : 'go';
     case 2: return (shownTypes.length >= 2 || n < 2) ? 'leave' : 'go';
     case 3: { if (pBust > .25 + bias) return 'leave'; if (path >= 5 + gb && path >= p.round * .5) return 'leave'; return 'go'; }
-    case 4: { if (n === 1) return pBust > .5 ? 'leave' : 'go'; return (shownTypes.length >= 1 && revealed >= 8 + gb) ? 'leave' : 'go'; }
+    case 4: { if (n === 1) return pBust > .5 ? 'leave' : 'go'; if (G.pathCards.some(c => c.kind === 'artifact' && c.art.status === 'path') && n >= 3 && revealed >= 5) return 'leave'; return (shownTypes.length >= 1 && revealed >= 8 + gb) ? 'leave' : 'go'; }
     case 5: {
       const revealedVals = G.pathCards.filter(c => c.kind === 'treasure').map(c => c.value);
       const pool = [...TREASURES]; revealedVals.forEach(v => { const i = pool.indexOf(v); if (i >= 0) pool.splice(i, 1); });
@@ -1150,6 +1207,8 @@ function aiDecide(p) {
       const risk = pBust * p.round;
       const others = G.players.filter(x => x !== p); const lead = p.tent - Math.max(...others.map(x => x.tent));
       const k = lead > 0 ? 1.5 : lead < 0 ? .65 : 1;
+      const artOnPath = G.pathCards.some(c => c.kind === 'artifact' && c.art.status === 'path');
+      if (artOnPath && n >= 3 && pBust > .12 + bias) return 'leave';
       if (path >= 3 && n >= 3 && path > evCard * 2.5 + bias * 10) return 'leave';
       if (lead > 0 && pBust > .18 + bias && p.round >= 3) return 'leave';
       if (lead < 0 && big >= 2 && pBust < .36 + bias) return 'go';
@@ -1195,8 +1254,8 @@ $$('#cmd-menu button').forEach((b, i) => { b.onclick = () => { if (!cmdEnabled(i
 $('#btn-quit').onclick = quitGame;
 $('#handoff-ok').onclick = () => { $('#handoff').hidden = true; showDecision(G.humanQueue[G.qi]); };
 document.addEventListener('keydown', e => {
-  if (!$('#lobby').hidden || !$('#modal').hidden || !$('#handoff').hidden || !$('#settings').hidden) return;
-  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); AudioEngine.sfx('cursor'); let i = cmdIndex; for (let k = 0; k < 4; k++) { i = (i + (e.key === 'ArrowDown' ? 1 : 3)) % 4; if (cmdEnabled(i)) break; } setCursor(i); }
+  if (!$('#lobby').hidden || !$('#modal').hidden || !$('#handoff').hidden || !$('#settings').hidden || !$('#deckwin').hidden) return;
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); AudioEngine.sfx('cursor'); let i = cmdIndex; for (let k = 0; k < CMDS.length; k++) { i = (i + (e.key === 'ArrowDown' ? 1 : CMDS.length - 1)) % CMDS.length; if (cmdEnabled(i)) break; } setCursor(i); }
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (cmdEnabled(cmdIndex)) runCmd(CMDS[cmdIndex]); }
 });
 
