@@ -40,7 +40,7 @@
 
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:15px;line-height:1.45;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC",system-ui,sans-serif;font-size:15px;font-weight:700;line-height:1.45;overflow-x:hidden}
 button,select,input{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0;padding:0}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
@@ -49,8 +49,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 @keyframes screenshake{10%,90%{transform:translate3d(-2px,1px,0)}20%,80%{transform:translate3d(4px,-2px,0)}30%,50%,70%{transform:translate3d(-8px,3px,0)}40%,60%{transform:translate3d(8px,-3px,0)}}
 
 /* ===== DQ 視窗 ===== */
-.win{position:relative;background:var(--win);border:3px solid var(--line);border-radius:7px;padding:8px 12px;color:var(--text)}
-.win::before{content:"";position:absolute;inset:2px;border:1px solid var(--line);border-radius:4px;pointer-events:none;opacity:.9}
+.win{position:relative;background:var(--win);border:4px solid var(--line);border-radius:10px;padding:8px 12px;color:var(--text);box-shadow:0 0 0 2px #000}
 .win.tight{padding:6px 10px}
 .win h3{margin:0 0 4px;font-size:13px;color:var(--yellow);font-weight:400;letter-spacing:.1em}
 .cur::before{content:"▶";display:inline-block;width:1.1em;color:var(--text)}
@@ -93,14 +92,14 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 @keyframes eq{0%,100%{height:30%}50%{height:100%}}
 
 /* ===== 場景 ===== */
-.scene{position:relative;width:100%;aspect-ratio:16/8.6;max-height:52dvh;min-height:150px;border:3px solid var(--line);border-radius:7px;overflow:hidden;background:#05070a;image-rendering:pixelated}
-.scene::before{content:"";position:absolute;inset:2px;border:1px solid var(--line);border-radius:4px;pointer-events:none;z-index:9;opacity:.9}
+.scene{position:relative;width:100%;aspect-ratio:16/8.6;max-height:52dvh;min-height:150px;border:4px solid var(--line);border-radius:10px;overflow:hidden;background:#1a1210;image-rendering:pixelated;box-shadow:0 0 0 2px #000}
+.scene canvas.bg{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;display:block}
 .scene svg.cave{position:absolute;inset:0;width:100%;height:100%;shape-rendering:crispEdges}
-.scene.turn svg.cave{animation:turnaround 1.3s ease-in-out both}
+.scene.turn canvas.bg{animation:turnaround 1.3s ease-in-out both}
 @keyframes turnaround{0%{transform:translateX(0)}40%{transform:translateX(38%) scale(1.08)}60%{transform:translateX(38%) scale(1.08)}100%{transform:translateX(0)}}
-.scene.turn #current-card,.scene.turn #sprites{animation:fadeout 1.3s ease-in-out both}
+.scene.turn #current-card,.scene.turn .pathwin{animation:fadeout 1.3s ease-in-out both}
 @keyframes fadeout{0%{opacity:1}30%{opacity:0}70%{opacity:0}100%{opacity:1}}
-.scene .vig{position:absolute;inset:0;z-index:7;pointer-events:none;background:radial-gradient(ellipse at 50% 60%,transparent 55%,rgba(0,0,0,.75));opacity:.85}
+.scene .vig{display:none}
 .scene .flame{transform-origin:50% 100%;animation:flame .35s steps(2) infinite alternate}
 @keyframes flame{to{transform:scaleY(1.25) scaleX(.85)}}
 .scene .glow{animation:glow 1.1s steps(3) infinite alternate;mix-blend-mode:screen}
@@ -120,19 +119,21 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .sprite .bubble.go{color:var(--green)}.sprite .bubble.leave{color:var(--cyan)}
 #current-card{position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:3}
 #current-card:empty::after{content:"";position:absolute}
-.altar-hint{position:absolute;left:50%;top:50%;translate:-50% -50%;color:var(--dim);font-size:12px;z-index:2;text-align:center;line-height:1.3}
+.altar-hint{position:absolute;left:50%;top:50%;translate:-50% -50%;color:#fff;text-shadow:2px 2px 0 #000;font-size:13px;z-index:2;text-align:center;line-height:1.3}
 .cmdrow{display:grid;grid-template-columns:minmax(96px,auto) 1fr;gap:6px;align-items:stretch}
 .cmd{min-width:96px;padding:6px 10px}
 .cmd .menu button{opacity:.45}
 .cmd.armed .menu button[data-c="go"],.cmd.armed .menu button[data-c="leave"],.cmd .menu button[data-c="log"],.cmd .menu button[data-c="quit"]{opacity:1}
 .cmd .menu button[data-c="quit"]{color:var(--red)}
 .mystat{position:absolute;left:8px;top:8px;z-index:10;font-size:12px;padding:3px 9px;line-height:1.35;min-width:96px}
-.mystat .n{color:var(--pc,var(--p1));border-bottom:1px solid var(--line);margin-bottom:2px;padding-bottom:1px}
+.mystat .n{color:#fff;border-bottom:1px solid var(--line);margin-bottom:2px;padding-bottom:1px}
 .mystat .r{display:flex;justify-content:space-between;gap:8px}
 .mystat b{font-weight:400;color:var(--yellow)}
 .cmd .who{color:var(--pc,var(--yellow));font-size:12px;margin-bottom:3px;padding-bottom:2px;border-bottom:1px solid var(--line);white-space:nowrap}
-.cmd .menu button{font-size:15px;padding:3px 6px}
+.cmd .menu button{font-size:16px;padding:3px 6px;font-weight:700}
 .cmd .hint{font-size:11px;color:var(--dim);margin-top:4px;line-height:1.3}
+.cmd .timer{font-size:12px;color:var(--yellow);margin-top:3px}
+.cmd .timer.urgent{color:var(--red);animation:blink .5s steps(2,start) infinite}
 .cmd .hint b{color:var(--yellow);font-weight:400}
 .cavetag{position:absolute;right:8px;top:8px;z-index:10;font-size:12px;padding:3px 8px}
 .bustfx{position:absolute;inset:0;z-index:8;display:none;pointer-events:none}
@@ -150,7 +151,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 @keyframes mummy{0%{translate:-50% 150%}100%{translate:-50% -50%}}
 .bustfx.fire .big{animation:fire .8s steps(5) both}
 @keyframes fire{0%{scale:0}70%{scale:1.4}100%{scale:1}}
-.toast{position:absolute;left:50%;top:38%;translate:-50% -50%;z-index:11;padding:10px 26px;font-size:clamp(16px,3.4vw,26px);letter-spacing:.25em;color:var(--yellow);animation:toast 2.2s steps(12) both;text-align:center;white-space:nowrap}
+.toast{position:absolute;left:50%;top:30%;translate:-50% -50%;z-index:11;padding:10px 26px;font-size:clamp(16px,3.4vw,26px);letter-spacing:.25em;color:var(--yellow);animation:toast 2.2s steps(12) both;text-align:center;white-space:nowrap}
 .toast small{display:block;font-size:.5em;letter-spacing:.3em;color:var(--dim)}
 @keyframes toast{0%{opacity:0}15%{opacity:1}80%{opacity:1}100%{opacity:0}}
 
@@ -168,8 +169,8 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 /* ===== 隊員窗 ===== */
 .party{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .pw{--pc:#fff;padding:5px 8px 6px;font-size:13px;transition:.3s;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;column-gap:8px;row-gap:0;align-items:center}
-.pw .pface{grid-row:1/4;width:40px;height:30px;image-rendering:pixelated;border:2px solid var(--line);background:#111;border-radius:3px}
-.pw .nm{color:var(--pc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.pw .pface{grid-row:1/4;width:48px;height:48px;image-rendering:pixelated;background:#000;border-radius:3px}
+.pw .nm{color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
 .pw .stats{display:flex;flex-wrap:wrap;gap:0 8px;line-height:1.3;font-variant-numeric:tabular-nums}
 .pw .stats span{color:var(--dim);white-space:nowrap}
 .pw .stats b{font-weight:400;color:var(--text);margin-left:3px}
@@ -200,7 +201,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .lockmsg{color:var(--dim);font-size:13px}
 
 /* ===== 卡牌（古董閃卡） ===== */
-.card{width:var(--card-w);height:var(--card-h);perspective:900px;position:relative;flex:none;touch-action:none;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.7))}
+.card{width:var(--card-w);height:var(--card-h);perspective:900px;position:relative;flex:none;touch-action:none;filter:drop-shadow(4px 6px 0 rgba(0,0,0,.45))}
 .card-tilt{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(var(--rotate-x)) rotateX(var(--rotate-y))}
 .card-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.2,.75,.25,1)}
 .card.flipped .card-inner{transform:rotateY(180deg)}
@@ -271,7 +272,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:#000;overflow:auto}
 .overlay[hidden]{display:none!important}
 .dlg{width:min(640px,100%);padding:14px 18px 16px}
-.dlg h2{margin:0 0 6px;font-size:22px;color:var(--yellow);font-weight:400;letter-spacing:.2em}
+.dlg h2{margin:0 0 6px;font-size:22px;color:var(--yellow);font-weight:700;letter-spacing:.2em}
 .dlg .sub{color:var(--dim);font-size:13px;margin-bottom:10px}
 .sec{margin:12px 0 4px;font-size:12px;color:var(--yellow);letter-spacing:.2em}
 .lv-row{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;padding:4px 0;border-bottom:1px dotted #444}
@@ -289,7 +290,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
 .rank .r .d.plus{color:var(--green)}.rank .r .d.minus{color:var(--red)}
 .rank .r.win{color:var(--yellow)}
 .title-art{text-align:center;padding:6px 0 10px}
-.title-art .big{font-size:clamp(34px,8vw,64px);letter-spacing:.3em;color:var(--yellow);text-shadow:3px 3px 0 #6b4a10;line-height:1.1}
+.title-art .big{font-size:clamp(34px,8vw,64px);letter-spacing:.3em;color:var(--yellow);text-shadow:4px 4px 0 #2a6ce0;line-height:1.1;font-weight:900}
 .title-art .en{font-size:13px;letter-spacing:.5em;color:var(--dim);margin-top:4px}
 .title-art .gem{width:56px;margin:0 auto 6px;display:block;animation:bob 1.2s steps(2) infinite}
 #handoff .dlg{text-align:center}
@@ -331,8 +332,8 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   .hud{font-size:11px;padding:2px 8px}.hud .title{display:none}
   .cmd .menu button{font-size:13px;padding:1px 4px}.cmd{padding:3px 8px}
   .msgwin{font-size:12px;padding:3px 10px 4px}.msgwin .lines{min-height:calc(1.5em * 3)}
-  .pw{padding:2px 6px 3px;font-size:11px;column-gap:6px;grid-template-columns:auto 1fr;grid-template-rows:auto auto}.pw .pface{width:30px;height:22px;grid-row:1/3}.pw .nm{grid-column:2;font-size:11px;line-height:1.2}.pw .stats{grid-column:2;gap:0 6px;line-height:1.2}.pw .st{display:none}
-  .cmd .hint{display:none}.cmd .who{font-size:11px}.cmd .menu{gap:0}
+  .pw{padding:2px 6px 3px;font-size:11px;column-gap:6px;grid-template-columns:auto 1fr;grid-template-rows:auto auto}.pw .pface{width:32px;height:32px;grid-row:1/3}.pw .nm{grid-column:2;font-size:11px;line-height:1.2}.pw .stats{grid-column:2;gap:0 6px;line-height:1.2}.pw .st{display:none}
+  .cmd .hint{display:none}.cmd .who{font-size:11px}.cmd .menu{gap:0}.cmd .timer{font-size:11px;margin-top:0}
   .mystat{font-size:10px;padding:2px 6px;min-width:80px}.cavetag{font-size:10px;padding:2px 6px}
   .pathwin{padding:2px 6px}.path{--card-w:24px;--card-h:34px;min-height:40px}
   .toast{font-size:15px;padding:6px 14px}
@@ -363,26 +364,9 @@ input[type=range]{accent-color:var(--yellow);width:70px}
   </header>
 
   <section class="scene" id="scene">
-      <svg class="cave" viewBox="0 0 320 168" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <pattern id="rock" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#2b1d12"/><rect x="0" y="0" width="4" height="4" fill="#33231a"/><rect x="4" y="4" width="4" height="4" fill="#33231a"/><rect x="2" y="5" width="2" height="1" fill="#1a110a"/></pattern>
-          <pattern id="floor" width="16" height="8" patternUnits="userSpaceOnUse"><rect width="16" height="8" fill="#1a1410"/><rect x="0" y="0" width="7" height="3" fill="#221a13"/><rect x="8" y="4" width="7" height="3" fill="#221a13"/></pattern>
-        </defs>
-        <rect width="320" height="168" fill="#07090c"/>
-        <rect width="320" height="118" fill="url(#rock)"/>
-        <polygon points="0,0 320,0 320,26 300,40 286,22 262,44 240,20 222,48 200,18 180,40 160,14 140,44 118,20 96,48 74,18 56,40 36,16 18,44 0,22" fill="#1c130b"/>
-        <polygon points="0,118 320,118 320,168 0,168" fill="url(#floor)"/>
-        <polygon points="0,110 320,110 320,120 0,120" fill="#3a2a1c"/>
-        <rect x="0" y="118" width="320" height="2" fill="#0c0906"/>
-        <g id="altar"><rect x="98" y="104" width="124" height="40" fill="#4a3a28"/><rect x="92" y="98" width="136" height="8" fill="#6b563b"/><rect x="92" y="98" width="136" height="2" fill="#8f7550"/><rect x="106" y="112" width="108" height="1" fill="#2a1f14"/><rect x="106" y="134" width="108" height="1" fill="#2a1f14"/><rect x="98" y="142" width="124" height="3" fill="#2a1f14"/></g>
-        <g id="tent"><polygon points="20,118 56,118 38,84" fill="#6a4a1c"/><polygon points="26,118 50,118 38,92" fill="#3a2a10"/><polygon points="34,118 42,118 38,104" fill="#0a0704"/><rect x="37" y="80" width="2" height="6" fill="#d9a93a"/><rect x="34" y="78" width="8" height="2" fill="#d9a93a"/></g>
-        <g><rect x="92" y="60" width="4" height="30" fill="#5a3a12"/><g class="flame"><rect x="90" y="52" width="8" height="8" fill="#ff8a1a"/><rect x="92" y="46" width="4" height="8" fill="#ffd23a"/><rect x="93" y="42" width="2" height="5" fill="#ffe97a"/></g><circle class="glow" cx="94" cy="56" r="26" fill="#ff9a2a" opacity=".11"/></g>
-        <g><rect x="224" y="60" width="4" height="30" fill="#5a3a12"/><g class="flame"><rect x="222" y="52" width="8" height="8" fill="#ff8a1a"/><rect x="224" y="46" width="4" height="8" fill="#ffd23a"/><rect x="225" y="42" width="2" height="5" fill="#ffe97a"/></g><circle class="glow" cx="226" cy="56" r="26" fill="#ff9a2a" opacity=".11"/></g>
-        <g fill="#ffe79a" opacity=".5"><rect x="150" y="76" width="1" height="1"/><rect x="170" y="70" width="1" height="1"/><rect x="60" y="58" width="1" height="1"/><rect x="262" y="66" width="1" height="1"/></g>
-      </svg>
+      <canvas class="bg" id="bgc" width="192" height="108"></canvas>
       <div class="vig"></div>
       <div class="altar-hint" id="altar-hint">你站在洞穴入口，祭壇上還沒有牌<br><small>按「出發」開始探險</small></div>
-      <div id="sprites"></div>
       <div id="current-card"></div>
       <div class="win tight mystat" id="mystat"><div class="n">探險家P1</div><div class="r"><span>寶石</span><b id="my-round">0</b></div><div class="r"><span>帳篷</span><b id="my-tent">0</b></div></div>
       <div class="win tight cavetag" id="cave-title">CAVE I</div>
@@ -400,6 +384,7 @@ input[type=range]{accent-color:var(--yellow);width:70px}
         <button id="btn-quit2" data-c="quit">退出</button>
       </div>
       <div class="hint" id="cmd-hint"></div>
+      <div class="timer" id="cmd-timer" hidden></div>
     </div>
     <div class="win msgwin" id="msgwin"><div class="lines" id="msg-lines"></div><span class="tri blink" id="msg-tri" hidden>▼</span></div>
   </div>
@@ -420,6 +405,10 @@ input[type=range]{accent-color:var(--yellow);width:70px}
     </div>
     <div class="sec">AI 智慧階層</div>
     <div id="lv-rows"></div>
+    <div class="sec">決策時限（時間到自動撤退）</div>
+    <div class="menu" id="timer-seg" style="flex-direction:row;flex-wrap:wrap;gap:4px 10px">
+      <button data-t="0">不限時</button><button data-t="10">10 秒</button><button data-t="20">20 秒</button><button data-t="30">30 秒</button><button data-t="60">60 秒</button>
+    </div>
     <div class="sec">冒險紀錄</div>
     <div class="stats" id="stats"></div>
     <div class="flex flex-wrap items-center gap-3 mt-4">
@@ -591,16 +580,29 @@ function renderStats() {
 }
 
 /* ================= STATE ================= */
-const G = { running: false, mode: 'solo', levels: [3, 3, 3], players: [], round: 0, deck: [], pathCards: [], shown: {}, removed: {}, phase: 'lobby', humanQueue: [], qi: 0 };
+const TL_KEY = 'incan-gold-timelimit';
+let timerId = null;
+function loadTimeLimit() { try { return +localStorage.getItem(TL_KEY) || 0; } catch (e) { return 0; } }
+function stopTimer() { clearInterval(timerId); timerId = null; const t = $('#cmd-timer'); t.hidden = true; t.classList.remove('urgent'); }
+function startTimer(p) {
+  stopTimer(); const limit = G.timeLimit; if (!limit) return;
+  const deadline = Date.now() + limit * 1000; const t = $('#cmd-timer'); t.hidden = false;
+  const tick = () => {
+    const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000)); t.textContent = `⏱ 剩 ${left} 秒，逾時自動撤退`; t.classList.toggle('urgent', left <= 5);
+    if (left <= 0) { stopTimer(); if (G.phase === 'decide' && $('#decision').classList.contains('armed') && !p.choice) { log(`<s>時間到，${p.name} 自動撤退。</s>`); onChoice('leave'); } }
+  };
+  tick(); timerId = setInterval(tick, 250);
+}
+const G = { running: false, timeLimit: loadTimeLimit(), mode: 'solo', levels: [3, 3, 3], players: [], round: 0, deck: [], pathCards: [], shown: {}, removed: {}, phase: 'lobby', humanQueue: [], qi: 0 };
 let cardId = 0;
 function pathTotal() { return G.pathCards.reduce((s, c) => s + (c.left || 0), 0); }
 function inCave() { return G.players.filter(p => p.inCave); }
 function humans() { return G.players.filter(p => p.type === 'human'); }
 function setupPlayers() {
-  G.players = [{ id: 0, name: '探險家P1', short: 'P1', emoji: '🧢', color: 'var(--p1)', pal: ['#39ff14', '#1c8a0a'], type: 'human', tent: 0 }];
-  if (G.mode === 'duo') G.players.push({ id: 1, name: '探險家P2', short: 'P2', emoji: '🎩', color: 'var(--p2)', pal: ['#ff3d9a', '#9c1a5a'], type: 'human', tent: 0 });
+  G.players = [{ id: 0, name: '勇者 P1', short: 'P1', emoji: '', cls: CLASSES[0], color: CLASSES[0].color, type: 'human', tent: 0 }];
+  if (G.mode === 'duo') G.players.push({ id: 1, name: '魔法師 P2', short: 'P2', emoji: '', cls: CLASSES[1], color: CLASSES[1].color, type: 'human', tent: 0 });
   const nAI = 4 - G.players.length;
-  for (let i = 0; i < nAI; i++) { const a = AI_POOL[i]; G.players.push({ id: G.players.length, name: a.name, short: a.name, emoji: a.emoji, color: a.color, pal: a.pal, type: 'ai', slot: i, level: G.levels[i], tent: 0, bias: rnd(-.06, .06), gbias: Math.round(rnd(-1, 1)) }); }
+  for (let i = 0; i < nAI; i++) { const c = CLASSES[G.players.length]; G.players.push({ id: G.players.length, name: c.name, short: c.name, emoji: '', cls: c, color: c.color, type: 'ai', slot: i, level: G.levels[i], tent: 0, bias: rnd(-.06, .06), gbias: Math.round(rnd(-1, 1)) }); }
   G.players.forEach(p => { p.round = 0; p.inCave = true; p.choice = null; p.gained = 0; p.lost = 0; p.status = 'cave'; });
 }
 function buildDeck() {
@@ -610,41 +612,79 @@ function buildDeck() {
   return shuffle(d);
 }
 
-/* ================= 像素小人 ================= */
-const SPR_A = ['....HHHH....', '...HHHHHH...', '..HHHHHHHH..', '.hhhhhhhhhh.', '...SSSSSS...', '...SeSSeS...', '...SSSSSS...', '....SSSS....', '..CCCCCCCC..', '.CCBCCCCBCC.', '.CCBCCCCBCC.', '.CCCCCCCCCC.', '..CCCCCCCC..', '..PP....PP..', '..PP....PP..', '.BBB....BBB.'];
-const SPR_B = SPR_A.slice(0, 13).concat(['...PP..PP...', '...PP..PP...', '..BBB..BBB..']);
-function drawFace(cv, pal) {
-  const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, 12, 9);
-  const C = { H: pal[0], h: pal[1], S: '#f1c27d', e: '#111', C: '#8b5a2b' };
-  SPR_A.slice(0, 9).forEach((row, y) => [...row].forEach((ch, x) => { if (C[ch]) { ctx.fillStyle = C[ch]; ctx.fillRect(x, y, 1, 1); } }));
+/* ================= DQ 像素頭像（16×16） ================= */
+const CLASSES = [
+  { key: 'hero', name: '勇者', color: '#4aa3ff', pal: { h: '#7a4a1a', b: '#2a6bd8', B: '#5aa0ff', s: '#f2c9a0', e: '#111', m: '#a0503a', c: '#3b4fd6' }, map: [
+    '....hhhhhhhh....', '...hhhhhhhhhh...', '..hhhhhhhhhhhh..', '..hhbbbbbbbbhh..', '..hBBBBBBBBBBh..', '..hbbbbbbbbbbh..', '..hsssssssssshh.', '..ssesssssesss..',
+    '..ssesssssesss..', '..ssssssssssss..', '...ssssmmssss...', '...sssssssssss..', '....ssssssss....', '..ccccssssccccc.', '.cccccccccccccc.', '.cccccccccccccc.'] },
+  { key: 'mage', name: '魔法師', color: '#d76bff', pal: { p: '#7b3fe4', P: '#4c1fa0', k: '#ff7ac8', s: '#f2c9a0', e: '#111', m: '#a0503a', y: '#ffd24a' }, map: [
+    '.......pp.......', '......pppp......', '.....pppppp.....', '....ppppyppp....', '...pppppppppp...', '..PPPPPPPPPPPP..', '.PPPPPPPPPPPPPP.', '..kkssssssssskk.',
+    '..kksesssssesk..', '..kkssssssssskk.', '..kksssmmsssskk.', '..kksssssssskkk.', '..kk.ssssss.kk..', '..pppppsspppppp.', '.pppppppppppppp.', '.pppppppppppppp.'] },
+  { key: 'warrior', name: '戰士', color: '#46d16a', pal: { w: '#f4f4f4', g: '#2fa84f', G: '#1c6b32', s: '#f2c9a0', e: '#111', m: '#a0503a', a: '#9aa3ad' }, map: [
+    '.w....gggg....w.', '.ww..gggggg..ww.', '..wwgggggggggww.', '...ggggggggggg..', '..gGGGGGGGGGGGg.', '..gGGGGGGGGGGGg.', '..GGssssssssGG..', '..Gsseessseess..',
+    '..sseessssseess.', '..ssssssssssss..', '...sssmmmmsss...', '...ssssssssss...', '....ssssssss....', '..aaaassssaaaa..', '.aaaaaaaaaaaaaa.', '.aaaaaaaaaaaaaa.'] },
+  { key: 'priest', name: '僧侶', color: '#ffd24a', pal: { u: '#3a6fe0', y: '#ffd24a', l: '#f6d66a', s: '#f2c9a0', e: '#111', m: '#a0503a' }, map: [
+    '.....uuuuuu.....', '....uuuuuuuu....', '...uuuuuyyuuuu..', '...uuuuyyyyuuu..', '...uuuuuyyuuuu..', '..uuuullllllluu.', '..uullssssssllu.', '..ullsesssseslu.',
+    '..ullssssssslu..', '..ullsssmmssslu.', '..ullssssssslu..', '..ull.ssssss.lu.', '..uu..ssssss.uu.', '..uuuuussssuuuu.', '.uuuuuuuuuuuuuu.', '.uuuuuuuuuuuuuu.'] },
+];
+function drawFace(cv, cls) {
+  cv.width = 16; cv.height = 16; const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, 16, 16);
+  cls.map.forEach((row, y) => [...row].forEach((ch, x) => { const c = cls.pal[ch]; if (c) { ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); } }));
 }
-function drawSprite(cv, map, pal) {
-  const ctx = cv.getContext('2d'); cv.width = 12; cv.height = 16; ctx.clearRect(0, 0, 12, 16);
-  const C = { H: pal[0], h: pal[1], S: '#f1c27d', e: '#111', C: '#8b5a2b', B: '#3b2a1a', P: '#4a4a6a' };
-  map.forEach((row, y) => [...row].forEach((ch, x) => { if (C[ch]) { ctx.fillStyle = C[ch]; ctx.fillRect(x, y, 1, 1); } }));
-}
-const AI_SLOTS_L = [{ x: 30, y: 97 }, { x: 72, y: 97 }, { x: 87, y: 93 }];
-const AI_SLOTS_P = [{ x: 15, y: 97 }, { x: 80, y: 97 }, { x: 93, y: 91 }];
-const mqPortrait = matchMedia('(orientation:portrait)');
-const SLOT = { cave: p => (mqPortrait.matches ? AI_SLOTS_P : AI_SLOTS_L)[p.slot] || AI_SLOTS_L[0], exit: () => ({ x: -12, y: 97 }) };
-mqPortrait.addEventListener('change', () => renderSprites());
-function renderSprites() {
-  const host = $('#sprites'); const sig = G.players.map(p => p.name).join('|');
-  if (host.dataset.sig !== sig) {
-    host.dataset.sig = sig; host.innerHTML = '';
-    G.players.filter(p => p.type === 'ai').forEach((p, k) => {
-      p.slot = k;
-      const el = document.createElement('div'); el.className = 'sprite'; el.id = 'sp-' + p.id; el.style.setProperty('--pc', p.color);
-      el.innerHTML = `<span class="tag">${p.short}</span><canvas></canvas><span class="bubble"></span>`; host.appendChild(el);
-      drawSprite(el.querySelector('canvas'), SPR_A, p.pal);
-    });
+
+/* ================= DQ 像素洞窟背景：五座洞穴各一種，依場景長寬比重繪 ================= */
+const CAVE_THEMES = [
+  { name: '岩洞', bg: '#1a1210', wall: '#6b4a2a', wallD: '#4a3119', wallL: '#8c6a3f', floor: '#7d5a33', floorD: '#5c4022', floorL: '#9a7446', deco: 'torch' },
+  { name: '水晶地下河', bg: '#0b1a2e', wall: '#2d4a6b', wallD: '#1c3049', wallL: '#3f6a94', floor: '#3a5c7d', floorD: '#26405a', floorL: '#4f7aa3', deco: 'crystal' },
+  { name: '印加石殿', bg: '#1c1a12', wall: '#8a7a55', wallD: '#5e5238', wallL: '#a89a70', floor: '#7d7050', floorD: '#5a5038', floorL: '#9a8c66', deco: 'temple' },
+  { name: '熔岩洞', bg: '#1a0705', wall: '#5a2a1e', wallD: '#3a1610', wallL: '#7a3d2a', floor: '#4a2418', floorD: '#2e150d', floorL: '#66321f', deco: 'lava' },
+  { name: '黃金寶庫', bg: '#1a1408', wall: '#7a5c1c', wallD: '#4f3a10', wallL: '#a3802c', floor: '#6b5218', floorD: '#4a380f', floorL: '#8c6c22', deco: 'gold' },
+];
+function drawBackground() {
+  const sc = $('#scene'), cv = $('#bgc'); if (!sc.clientWidth) return;
+  const th = CAVE_THEMES[Math.max(0, (G.round || 1) - 1) % 5];
+  const W = 192, H = Math.max(80, Math.round(W * sc.clientHeight / sc.clientWidth)); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d'); let seed = 11 + (G.round || 1) * 7; const R = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const rect = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(x | 0, y | 0, w | 0, h | 0); };
+  const px = (x, y, c) => rect(x, y, 1, 1, c);
+  const horizon = Math.round(H * .62);
+  rect(0, 0, W, H, th.bg);
+  for (let y = 0; y < horizon; y++) for (let x = 0; x < W; x++) { const r = R(); px(x, y, r < .08 ? th.wallL : r < .2 ? th.wallD : th.wall); }
+  if (th.deco === 'temple' || th.deco === 'gold') { for (let y = 8; y < horizon; y += 10) { rect(0, y, W, 1, th.wallD); for (let x = (y / 10 % 2) * 12; x < W; x += 24) rect(x, y, 1, 10, th.wallD); } }
+  for (let i = 0; i < 14; i++) { const cx = R() * W, h = 8 + R() * 16, w = 3 + R() * 4; for (let y = 0; y < h; y++) { const ww = Math.max(1, w * (1 - y / h)); rect(cx - ww / 2, y, ww, 1, y % 4 === 0 ? th.wallD : th.bg); px(cx - ww / 2, y, th.wallD); } }
+  rect(0, 0, W, 4, th.bg); rect(0, 4, W, 1, th.wallD);
+  for (let y = horizon; y < H; y++) for (let x = 0; x < W; x++) { const r = R(); px(x, y, r < .06 ? th.floorL : r < .16 ? th.floorD : th.floor); }
+  rect(0, horizon, W, 2, th.floorD); rect(0, horizon + 2, W, 1, th.floorL);
+  if (th.deco === 'temple' || th.deco === 'gold') { for (let y = horizon + 6; y < H; y += 8) rect(0, y, W, 1, th.floorD); for (let x = 0; x < W; x += 16) rect(x, horizon, 1, H - horizon, th.floorD); }
+  const torch = (x, y) => { rect(x, y, 3, 14, '#5a3a12'); rect(x - 1, y - 4, 5, 4, '#ff8a1a'); rect(x, y - 7, 3, 3, '#ffd23a'); rect(x + 1, y - 9, 1, 2, '#ffe97a'); for (let i = 0; i < 40; i++) { const a = R() * Math.PI * 2, d = R() * 12; px(x + 1 + Math.cos(a) * d, y - 5 + Math.sin(a) * d * .6, R() < .5 ? '#ff9a2a' : '#ffc060'); } };
+  const pillar = (x, c1, c2) => { rect(x, 6, 10, horizon - 6, c1); rect(x, 6, 2, horizon - 6, c2); rect(x + 8, 6, 2, horizon - 6, c2); rect(x - 2, 6, 14, 3, c2); rect(x - 2, horizon - 3, 14, 3, c2); for (let y = 12; y < horizon - 6; y += 9) rect(x + 3, y, 4, 2, c2); };
+  const sun = (cx, cy, r, c1, c2) => { for (let a = 0; a < 16; a++) { const dx = Math.cos(a * Math.PI / 8), dy = Math.sin(a * Math.PI / 8); for (let d = r; d < r + 6; d++) px(cx + dx * d, cy + dy * d, a % 2 ? c1 : c2); } for (let y = -r; y <= r; y++) for (let x = -r; x <= r; x++) if (x * x + y * y <= r * r) px(cx + x, cy + y, x * x + y * y < (r - 2) * (r - 2) ? c1 : c2); px(cx - 2, cy - 1, th.wallD); px(cx + 2, cy - 1, th.wallD); rect(cx - 2, cy + 2, 5, 1, th.wallD); };
+  if (th.deco === 'torch') { torch(Math.round(W * .18), Math.round(horizon * .45)); torch(Math.round(W * .82), Math.round(horizon * .45)); }
+  if (th.deco === 'crystal') {
+    const cry = (x, y, h, c1, c2) => { for (let i = 0; i < h; i++) { const w = Math.max(1, 5 * (1 - i / h)); rect(x - w / 2, y - i, w, 1, i % 4 === 0 ? c2 : c1); } px(x, y - h, '#ffffff'); };
+    for (let i = 0; i < 9; i++) { const x = R() * W, base = horizon - 1 + R() * 3, h = 8 + R() * 18; cry(x, base, h, R() < .5 ? '#6fd7ff' : '#b58cff', '#e6f7ff'); }
+    for (let i = 0; i < 6; i++) { const x = R() * W, h = 6 + R() * 10; for (let k = 0; k < h; k++) { const w = Math.max(1, 4 * (1 - k / h)); rect(x - w / 2, 3 + k, w, 1, k % 4 === 0 ? '#e6f7ff' : '#6fd7ff'); } }
+    rect(0, H - 12, W, 12, '#1f5fa0'); rect(0, H - 12, W, 1, '#8fd3ff'); for (let i = 0; i < 40; i++) px(R() * W, H - 11 + R() * 11, R() < .5 ? '#4f9fe0' : '#8fd3ff');
+    for (let i = 0; i < 30; i++) px(R() * W, R() * horizon, R() < .5 ? '#6fd7ff' : '#ffffff');
   }
-  G.players.filter(p => p.type === 'ai').forEach(p => {
-    const el = $('#sp-' + p.id); if (!el || el.dataset.moving) return;
-    const s = SLOT.cave(p); el.style.left = s.x + '%'; el.style.top = s.y + '%';
-    el.hidden = p.status === 'out'; el.classList.toggle('down', p.status === 'bust'); el.classList.remove('face-left');
-  });
+  if (th.deco === 'temple') { pillar(Math.round(W * .1), th.wallL, th.wallD); pillar(Math.round(W * .84), th.wallL, th.wallD); sun(Math.round(W / 2), Math.round(horizon * .4), 10, '#d9a93a', '#8a6a1e'); torch(Math.round(W * .26), Math.round(horizon * .5)); torch(Math.round(W * .72), Math.round(horizon * .5)); }
+  if (th.deco === 'lava') {
+    for (let i = 0; i < 26; i++) { const x = R() * W, y = R() * horizon, c = R() < .5 ? '#ff5a1a' : '#ff9a2a'; px(x, y, c); if (R() < .5) px(x + 1, y, c); }
+    rect(0, H - 14, W, 14, '#ff6a1a'); rect(0, H - 14, W, 2, '#ffd23a'); for (let i = 0; i < 60; i++) { const x = R() * W, y = H - 12 + R() * 12; rect(x, y, 1 + R() * 3, 1, R() < .5 ? '#ffb23a' : '#c83a10'); }
+    for (let x = 0; x < W; x += 7) rect(x, H - 15 - R() * 3, 3, 2, '#3a1610');
+    for (let i = 0; i < 5; i++) { const x = R() * W, y = horizon - 2 - R() * 20; for (let k = 0; k < 14; k++) { const w = Math.max(1, 4 - k * .3); rect(x - w / 2, y + k, w, 1, k % 3 ? '#ff6a1a' : '#ffd23a'); } }
+  }
+  if (th.deco === 'gold') {
+    pillar(Math.round(W * .08), '#d9a93a', '#8a6a1e'); pillar(Math.round(W * .87), '#d9a93a', '#8a6a1e'); sun(Math.round(W / 2), Math.round(horizon * .38), 12, '#ffd23a', '#b8860b');
+    const pile = (cx, cy, r) => { for (let y = 0; y < r; y++) { const w = (r - y) * 2.2; rect(cx - w / 2, cy - y, w, 1, y % 2 ? '#e0b030' : '#ffd23a'); } for (let i = 0; i < r * 3; i++) px(cx + (R() - .5) * r * 2, cy - R() * r * .8, R() < .5 ? '#fff3a0' : '#b8860b'); };
+    pile(Math.round(W * .2), H - 8, 10); pile(Math.round(W * .8), H - 6, 12); pile(Math.round(W * .32), H - 4, 6); pile(Math.round(W * .66), H - 5, 7);
+    for (let i = 0; i < 30; i++) px(R() * W, horizon + R() * (H - horizon), '#fff3a0');
+    torch(Math.round(W * .24), Math.round(horizon * .5)); torch(Math.round(W * .74), Math.round(horizon * .5));
+  }
+  const pw = Math.round(W * .34), pxx = Math.round((W - pw) / 2), py = Math.round(H * .74);
+  rect(pxx - 6, py + 8, pw + 12, 2, th.floorD); rect(pxx, py, pw, 8, '#7a7f86'); rect(pxx, py, pw, 2, '#a6acb3'); rect(pxx + 2, py + 8, pw - 4, 3, '#4d5157'); for (let x = pxx + 4; x < pxx + pw - 4; x += 6) rect(x, py + 3, 2, 2, '#4d5157');
 }
+addEventListener('resize', drawBackground);
 
 /* ================= RENDER ================= */
 const gemSVG = (v) => {
@@ -666,11 +706,11 @@ function renderPlayers() {
   if (host.dataset.sig !== sig) {
     host.dataset.sig = sig;
     host.innerHTML = G.players.map(p => `<div class="win pw" id="pl-${p.id}" style="--pc:${p.color}">
-      <canvas class="pface" width="12" height="9"></canvas>
+      <canvas class="pface" width="16" height="16"></canvas>
       <div class="nm">${p.name}</div>
       <div class="stats"><span>寶<b class="gem round-n">0</b></span><span>帳<b class="tent-n">0</b></span><span>Lv<b>${p.type === 'human' ? '－' : p.level}</b></span></div>
       <div class="st"></div></div>`).join('');
-    G.players.forEach(p => drawFace($('#pl-' + p.id + ' .pface'), p.pal));
+    G.players.forEach(p => drawFace($('#pl-' + p.id + ' .pface'), p.cls));
   }
   const me = G.players[+($('#decision').dataset.pid ?? 0)] || G.players[0];
   if (me) { $('#mystat').style.setProperty('--pc', me.color); $('#mystat .n').textContent = me.name; $('#my-round').textContent = me.round; $('#my-tent').textContent = me.tent; }
@@ -679,11 +719,10 @@ function renderPlayers() {
     el.querySelector('.st').textContent = el.classList.contains('thinking') ? '抉擇中…' : p.status === 'cave' ? '洞穴中' : p.status === 'out' ? '已回營' : '被埋葬';
     el.querySelector('.round-n').textContent = p.round; el.querySelector('.tent-n').textContent = p.tent;
   });
-  renderSprites();
 }
 function renderTop() {
   $('#ui-round').textContent = G.round || '–'; $('#ui-deck').textContent = G.deck.length;
-  $('#cave-title').textContent = 'CAVE ' + (ROMAN[G.round] || '') + (G.round ? `　洞穴內 ${inCave().length} 人` : '');
+  $('#cave-title').textContent = 'CAVE ' + (ROMAN[G.round] || '') + (G.round ? ` ${CAVE_THEMES[(G.round - 1) % 5].name}　洞穴內 ${inCave().length} 人` : '');
   $('#hz-track').innerHTML = HZ_KEYS.map(t => `<span class="hz" data-n="${G.shown[t] || 0}" ${G.removed[t] ? 'data-removed="1"' : ''} title="${HAZARDS[t].name}：已出 ${G.shown[t] || 0} 張${G.removed[t] ? `，牌庫已移除 ${G.removed[t]} 張` : ''}">${HAZARDS[t].icon}<span class="cnt">${G.shown[t] || 0}</span></span>`).join('');
   $('#path-gems').textContent = pathTotal();
 }
@@ -791,9 +830,9 @@ function coinBurst(el, n = 14) {
 async function gemsToPlayers(fromEl, shares) {
   const from = center(fromEl); AudioEngine.sfx('gem');
   await Promise.all(shares.map(async ({ p, n }, i) => {
-    const av = p.type === 'ai' ? $('#sp-' + p.id) : $('#pl-' + p.id + ' .round-n'); const to = center(av);
+    const av = $('#pl-' + p.id + ' .round-n'); const to = center(av);
     const chip = spawn('chip', from.x - 14, from.y - 10, '+' + n);
-    await wait(i * 70); await fly(chip, { x: from.x - 14, y: from.y - 10 }, { x: to.x - 14, y: to.y - (p.type === 'ai' ? 40 : 10) }, REDUCED ? 150 : 550, { arc: 30 });
+    await wait(i * 70); await fly(chip, { x: from.x - 14, y: from.y - 10 }, { x: to.x - 14, y: to.y - 10 }, REDUCED ? 150 : 550, { arc: 30 });
     chip.remove(); $('#pl-' + p.id + ' .round-n').textContent = p.round;
   }));
 }
@@ -807,13 +846,7 @@ async function animateRetreat(p, share) {
     await Promise.all(chips); AudioEngine.sfx('gem'); renderPath(); renderTop(); setTimeout(() => lbl.remove(), 500);
   }
   if (p.type === 'ai') {
-    const sp = $('#sp-' + p.id); sp.dataset.moving = '1'; sp.classList.add('walk', 'face-left');
-    const from = SLOT.cave(p), to = SLOT.exit(); const mid = { x: from.x * .45 + 6, y: from.y };
-    AudioEngine.sfx('step');
-    await sp.animate([{ left: from.x + '%' }, { left: mid.x + '%' }], { duration: 550 * d, easing: 'steps(6)', fill: 'forwards' }).finished; sp.style.left = mid.x + '%';
-    await absorb(sp, 20);
-    await sp.animate([{ left: mid.x + '%' }, { left: to.x + '%' }], { duration: 650 * d, easing: 'steps(8)', fill: 'forwards' }).finished; sp.style.left = to.x + '%';
-    sp.classList.remove('walk'); delete sp.dataset.moving; sp.hidden = true;
+    AudioEngine.sfx('step'); await wait(250 * d); await absorb(pl.querySelector('.tent-n'), 10); await wait(200 * d);
   } else {
     const sc = $('#scene'); sc.classList.remove('turn'); void sc.offsetWidth; sc.classList.add('turn'); AudioEngine.sfx('step');
     await wait(450 * d); await absorb(pl.querySelector('.tent-n'), 10); await wait(500 * d); sc.classList.remove('turn');
@@ -840,7 +873,7 @@ async function nextRound() {
   G.round++; G.deck = buildDeck(); G.pathCards = []; G.shown = {};
   G.players.forEach(p => { p.round = 0; p.inCave = true; p.choice = null; p.gained = 0; p.lost = 0; p.status = 'cave'; });
   $('#current-card').innerHTML = ''; hideDecision();
-  renderPlayers(); renderTop(); renderPath();
+  renderPlayers(); renderTop(); renderPath(); drawBackground();
   if (!G.running) return;
   AudioEngine.sfx('round'); toast(`第 ${ROMAN[G.round]} 座洞穴<small>CAVE ${ROMAN[G.round]}</small>`);
   await log(`來到了第 ${G.round} 座洞穴。牌庫 ${G.deck.length} 張。`);
@@ -888,7 +921,7 @@ function goDecision() {
   if (!G.running) return;
   const ic = inCave(); if (!ic.length) return endRound(false);
   G.phase = 'decide'; G.players.forEach(p => { p.choice = null; });
-  ic.filter(p => p.type === 'ai').forEach(p => { p.choice = aiDecide(p); $('#pl-' + p.id).classList.add('thinking'); $('#sp-' + p.id)?.classList.add('thinking'); });
+  ic.filter(p => p.type === 'ai').forEach(p => { p.choice = aiDecide(p); $('#pl-' + p.id).classList.add('thinking'); });
   renderPlayers();
   G.humanQueue = ic.filter(p => p.type === 'human'); G.qi = 0;
   if (!G.humanQueue.length) { log('你已在營地。AI 們正在抉擇…'); setTimeout(revealChoices, T.aiReveal); return; }
@@ -910,7 +943,7 @@ function cmdEnabled(i) { const c = CMDS[i]; return (c === 'go' || c === 'leave')
 function showDecision(p) {
   const d = $('#decision'); d.classList.add('armed');
   d.style.setProperty('--pc', p.color); $('#decision-who').textContent = `${p.name} 要怎麼做？`;
-  d.dataset.pid = p.id; setCursor(0); renderPlayers();
+  d.dataset.pid = p.id; setCursor(0); renderPlayers(); startTimer(p);
   log(`${p.name}，前進還是撤退？`);
 }
 function setCursor(i) {
@@ -922,7 +955,7 @@ function setCursor(i) {
   else if (CMDS[i] === 'log') hint.textContent = '顯示／隱藏完整探險紀錄';
   else hint.textContent = d.classList.contains('armed') ? '↑↓ 選擇　Enter 決定' : '';
 }
-function hideDecision() { const d = $('#decision'); d.classList.remove('armed'); $('#decision-who').textContent = '指令'; $('#app').classList.remove('hl-path'); $$('#cmd-menu button').forEach(b => b.classList.remove('on')); $('#cmd-hint').textContent = ''; }
+function hideDecision() { stopTimer(); const d = $('#decision'); d.classList.remove('armed'); $('#decision-who').textContent = '指令'; $('#app').classList.remove('hl-path'); $$('#cmd-menu button').forEach(b => b.classList.remove('on')); $('#cmd-hint').textContent = ''; }
 function runCmd(c) {
   if (c === 'log') { const l = $('#log'); l.hidden = !l.hidden; l.scrollTop = l.scrollHeight; AudioEngine.sfx('cursor'); return; }
   if (c === 'quit') return quitGame();
@@ -934,7 +967,7 @@ function quitGame() {
   $$('.fx').forEach(e => e.remove()); $$('.toast').forEach(e => e.remove());
   $('#current-card').innerHTML = ''; $('#altar-hint').hidden = false;
   G.round = 0; G.deck = []; G.pathCards = []; G.shown = {}; setupPlayers(); delete $('#decision').dataset.pid;
-  renderPlayers(); renderTop(); renderPath(); AudioEngine.sfx('lock'); $('#lobby').hidden = false;
+  renderPlayers(); renderTop(); renderPath(); drawBackground(); AudioEngine.sfx('lock'); $('#lobby').hidden = false;
 }
 function onChoice(choice) {
   if (G.phase !== 'decide' || !$('#decision').classList.contains('armed')) return; const p = G.players[+$('#decision').dataset.pid]; if (!p || p.choice) return;
@@ -947,15 +980,14 @@ function onChoice(choice) {
 async function revealChoices() {
   if (!G.running) return;
   G.phase = 'resolve'; AudioEngine.sfx('reveal');
-  G.players.forEach(p => { $('#pl-' + p.id).classList.remove('thinking'); $('#sp-' + p.id)?.classList.remove('thinking'); });
+  G.players.forEach(p => { $('#pl-' + p.id).classList.remove('thinking'); });
   const ic = inCave();
-  ic.forEach(p => { if (p.type === 'ai') { const c = $('#sp-' + p.id + ' .bubble'); c.className = 'bubble ' + p.choice; c.textContent = p.choice === 'go' ? '前進！' : '撤退！'; void c.offsetWidth; c.classList.add('show'); } });
   const leavers = ic.filter(p => p.choice === 'leave'), stayers = ic.filter(p => p.choice === 'go');
   renderPlayers();
   ic.forEach(p => { const st = $('#pl-' + p.id + ' .st'); st.textContent = p.choice === 'go' ? '▶ 前進！' : '▶ 撤退！'; st.style.color = p.choice === 'go' ? 'var(--green)' : 'var(--cyan)'; });
   log(`亮牌：${ic.map(p => `${p.short}${p.choice === 'go' ? '<b>前進</b>' : '<s>撤退</s>'}`).join('　')}`);
   await wait(T.chip);
-  $$('.bubble').forEach(c => c.classList.remove('show')); $$('.pw .st').forEach(st => st.style.color = '');
+  $$('.pw .st').forEach(st => st.style.color = '');
   if (leavers.length) {
     const pt = pathTotal(); const share = Math.floor(pt / leavers.length);
     let need = share * leavers.length;
@@ -1022,12 +1054,14 @@ function aiDecide(p) {
 /* ================= LOBBY / UI WIRING ================= */
 function renderLobby() {
   $$('#mode-seg button').forEach(b => b.classList.toggle('on', b.dataset.mode === G.mode));
+  $$('#timer-seg button').forEach(b => b.classList.toggle('on', +b.dataset.t === G.timeLimit));
   const nAI = G.mode === 'duo' ? 2 : 3;
-  $('#lv-rows').innerHTML = AI_POOL.slice(0, nAI).map((a, i) => `<div class="lv-row" style="--pc:${a.color}"><span class="nm">${a.emoji} ${a.name}</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}・${LEVELS[l].en}</option>`).join('')}</select><div class="lv-desc" id="lvd-${i}">${LEVELS[G.levels[i]].d}</div></div>`).join('');
+  $('#lv-rows').innerHTML = CLASSES.slice(4 - nAI).map((a, i) => `<div class="lv-row" style="--pc:${a.color}"><span class="nm">${a.name}（AI）</span><select data-i="${i}" id="lv-${i}">${[1, 2, 3, 4, 5].map(l => `<option value="${l}" ${G.levels[i] === l ? 'selected' : ''}>Lv${l} ${LEVELS[l].n}・${LEVELS[l].en}</option>`).join('')}</select><div class="lv-desc" id="lvd-${i}">${LEVELS[G.levels[i]].d}</div></div>`).join('');
   $$('#lv-rows select').forEach(s => s.onchange = () => { G.levels[+s.dataset.i] = +s.value; $('#lvd-' + s.dataset.i).textContent = LEVELS[+s.value].d; });
   renderStats();
 }
 $('#mode-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.mode = b.dataset.mode; AudioEngine.sfx('cursor'); renderLobby(); });
+$('#timer-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; G.timeLimit = +b.dataset.t; try { localStorage.setItem(TL_KEY, G.timeLimit); } catch (err) { } AudioEngine.sfx('cursor'); renderLobby(); });
 $('#btn-start').onclick = () => { AudioEngine.sfx('lock'); startGame(); };
 $('#btn-reset-stats').onclick = () => { saveStats(defStats()); renderStats(); };
 $$('#cmd-menu button').forEach((b, i) => { b.onclick = () => { if (!cmdEnabled(i)) return; setCursor(i); runCmd(b.dataset.c); }; b.addEventListener('pointerenter', () => { if (cmdIndex !== i) { AudioEngine.sfx('cursor'); setCursor(i); } }); b.addEventListener('focus', () => setCursor(i)); });
@@ -1047,7 +1081,7 @@ $('#bgm-vol').oninput = e => AudioEngine.setVolume(e.target.value / 100);
 let sfxOn = true; $('#sfx-toggle').onclick = () => { sfxOn = !sfxOn; AudioEngine.setSfx(sfxOn); $('#sfx-toggle').style.opacity = sfxOn ? 1 : .4; };
 
 /* initial state behind the title screen */
-setupPlayers(); renderPlayers(); renderTop(); renderPath(); renderLobby();
+setupPlayers(); renderPlayers(); renderTop(); renderPath(); renderLobby(); drawBackground(); setTimeout(drawBackground, 300);
 })();
 </script>
 </body>
